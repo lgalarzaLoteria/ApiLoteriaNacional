@@ -39,6 +39,12 @@ namespace ApiLoteriaNacional.Controllers
             return Ok(await _mantenimiento.obtenerSecciones());
         }
 
+        [HttpPost("ObtenerSeccionesFormulario")]
+        public async Task<IActionResult> ObtenerSeccionesFormulario()
+        {
+            return Ok(await _mantenimiento.obtenerSeccionesFormulario());
+        }
+
         #endregion
 
         #region Preguntas
@@ -85,6 +91,33 @@ namespace ApiLoteriaNacional.Controllers
         {
             return Ok(await _mantenimiento.obtenerNovedades());
         }
+
+        #endregion
+
+        #region Aplicaciones
+        [HttpPost("MantenimientoObtenerAplicaciones")]
+        public async Task<IActionResult> MantenimientoObtenerAplicaciones([FromBody] AplicacionDTO aplicaciones)
+        {
+            return Ok(await _mantenimiento.mantenimientoAplicaciones(aplicaciones));
+
+        }
+
+        [HttpPost("MantenimientoGrabarAplicaciones")]
+        public async Task<IActionResult> MantenimientoGrabarAplicaciones(AplicacionDTO aplicaciones)
+        {
+            return Ok(await _mantenimiento.mantenimientoGrabarAplicaciones(aplicaciones));
+
+        }
+
+        [HttpPost("ObtenerAplicaciones")]
+        public async Task<IActionResult> ObtenerAplicaciones()
+        {
+            return Ok(await _mantenimiento.obtenerAplicaciones());
+        }
+
+        #endregion
+
+        #region Procesos por Aplicacion
 
         #endregion
     }

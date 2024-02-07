@@ -150,6 +150,35 @@ namespace ApiLoteriaNacional.Data
                 return new RespuestaDTO(-1, e.Message, "");
             }
         }
+        public async Task<RespuestaDTO> obtenerSeccionesFormulario()
+        {
+            try
+            {
+                using SqlConnection sql = new SqlConnection(_cadenaConexion);
+                using SqlCommand cmd = new SqlCommand("dbo.obtenerSeccionesFormulario", sql);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.Parameters.Add("@co_msg", SqlDbType.Int).Direction = ParameterDirection.Output;
+                cmd.Parameters.Add("@ds_msg", SqlDbType.VarChar, 250).Direction = ParameterDirection.Output;
+
+                await sql.OpenAsync();
+                var reader = await cmd.ExecuteReaderAsync();
+                DataTable dtDatos = new DataTable();
+                dtDatos.Load(reader);
+                reader.Close();
+
+                return new RespuestaDTO(
+                    Convert.ToInt32(cmd.Parameters["@co_msg"].Value),
+                    cmd.Parameters["@ds_msg"].Value.ToString(),
+                    JsonConvert.SerializeObject(dtDatos)
+                    )
+                    ;
+
+            }
+            catch (Exception e)
+            {
+                return new RespuestaDTO(-1, e.Message, "");
+            }
+        }
         #endregion
 
         #region Preguntas
@@ -426,6 +455,143 @@ namespace ApiLoteriaNacional.Data
                 return new RespuestaDTO(-1, e.Message, "");
             }
         }
+        #endregion
+
+        #region Aplicaciones
+        public async Task<RespuestaDTO> mantenimientoAplicaciones(AplicacionDTO dato)
+        {
+            try
+            {
+                using SqlConnection sql = new SqlConnection(_cadenaConexion);
+                using SqlCommand cmd = new SqlCommand("dbo.mantenimientoAplicaciones", sql);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.Parameters.Add("@usuarioTransaccion", SqlDbType.VarChar, 15);
+                cmd.Parameters["@usuarioTransaccion"].Value = dato.usuarioTransaccion;
+                cmd.Parameters.Add("@equipoTransaccion", SqlDbType.VarChar, 250);
+                cmd.Parameters["@equipoTransaccion"].Value = dato.equipoTransaccion;
+                cmd.Parameters.Add("@opcion", SqlDbType.Char, 2);
+                cmd.Parameters["@opcion"].Value = "CO";
+                cmd.Parameters.Add("@co_msg", SqlDbType.Int).Direction = ParameterDirection.Output;
+                cmd.Parameters.Add("@ds_msg", SqlDbType.VarChar, 250).Direction = ParameterDirection.Output;
+
+                await sql.OpenAsync();
+                var reader = await cmd.ExecuteReaderAsync();
+
+                DataTable dtDatos = new DataTable();
+                dtDatos.Load(reader);
+                reader.Close();
+
+                return new RespuestaDTO(
+                    Convert.ToInt32(cmd.Parameters["@co_msg"].Value),
+                    cmd.Parameters["@ds_msg"].Value.ToString(),
+                    JsonConvert.SerializeObject(dtDatos)
+                    )
+                    ;
+
+            }
+            catch (Exception e)
+            {
+                return new RespuestaDTO(-1, e.Message, "");
+            }
+        }
+        public async Task<RespuestaDTO> mantenimientoGrabarAplicaciones(AplicacionDTO dato)
+        {
+            int respuesta = 0;
+            using SqlConnection sql = new SqlConnection(_cadenaConexion);
+            using SqlCommand cmd = new SqlCommand("dbo.mantenimientoAplicaciones", sql);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            await sql.OpenAsync();
+            SqlTransaction sqlTransaccion = sql.BeginTransaction();
+            cmd.Transaction = sqlTransaccion;
+            try
+            {
+                string opcion = string.Empty;
+
+                if (dato.codigoAplicacion == 0)
+                    opcion = "IN";
+                else
+                    opcion = "AC";
+
+                cmd.Parameters.Add("@codigoAplicacion", SqlDbType.SmallInt);
+                cmd.Parameters["@codigoAplicacion"].Value = dato.codigoAplicacion;
+                cmd.Parameters.Add("@nombreAplicacion", SqlDbType.VarChar, 255);
+                cmd.Parameters["@nombreAplicacion"].Value = dato.nombreAplicacion;
+                cmd.Parameters.Add("@estadoAplicacion", SqlDbType.Bit);
+                cmd.Parameters["@estadoAplicacion"].Value = dato.estadoAplicacion;
+                cmd.Parameters.Add("@usuarioTransaccion", SqlDbType.VarChar, 20);
+                cmd.Parameters["@usuarioTransaccion"].Value = dato.usuarioTransaccion;
+                cmd.Parameters.Add("@equipoTransaccion", SqlDbType.VarChar, 250);
+                cmd.Parameters["@equipoTransaccion"].Value = dato.equipoTransaccion;
+                cmd.Parameters.Add("@opcion", SqlDbType.Char, 2);
+                cmd.Parameters["@opcion"].Value = opcion;
+                cmd.Parameters.Add("@co_msg", SqlDbType.Int).Direction = ParameterDirection.Output;
+                cmd.Parameters.Add("@ds_msg", SqlDbType.VarChar, 250).Direction = ParameterDirection.Output;
+                respuesta = await cmd.ExecuteNonQueryAsync();
+                sqlTransaccion.Commit();
+
+                return new RespuestaDTO(
+                    Convert.ToInt32(cmd.Parameters["@co_msg"].Value),
+                    Convert.ToString(cmd.Parameters["@ds_msg"].Value),
+                    ""
+                    );
+
+            }
+            catch (SqlException ex)
+            {
+                try
+                {
+                    sqlTransaccion.Rollback();
+                    return new RespuestaDTO(ex.ErrorCode, ex.Message, "");
+                }
+                catch (Exception ex2)
+                {
+                    return new RespuestaDTO(ex.ErrorCode, ex2.Message, "");
+                }
+            }
+            catch (Exception e)
+            {
+                return new RespuestaDTO(-1, e.Message, "");
+            }
+            finally
+            {
+                sql.Close();
+            }
+
+
+        }
+        public async Task<RespuestaDTO> obtenerAplicaciones()
+        {
+            try
+            {
+                using SqlConnection sql = new SqlConnection(_cadenaConexion);
+                using SqlCommand cmd = new SqlCommand("dbo.obtenerAplicaciones", sql);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.Parameters.Add("@co_msg", SqlDbType.Int).Direction = ParameterDirection.Output;
+                cmd.Parameters.Add("@ds_msg", SqlDbType.VarChar, 250).Direction = ParameterDirection.Output;
+
+                await sql.OpenAsync();
+                var reader = await cmd.ExecuteReaderAsync();
+                DataTable dtDatos = new DataTable();
+                dtDatos.Load(reader);
+                reader.Close();
+
+                return new RespuestaDTO(
+                    Convert.ToInt32(cmd.Parameters["@co_msg"].Value),
+                    cmd.Parameters["@ds_msg"].Value.ToString(),
+                    JsonConvert.SerializeObject(dtDatos)
+                    )
+                    ;
+
+            }
+            catch (Exception e)
+            {
+                return new RespuestaDTO(-1, e.Message, "");
+            }
+        }
+        #endregion
+
+        #region Procesos por Aplicacion
+
         #endregion
     }
 }
