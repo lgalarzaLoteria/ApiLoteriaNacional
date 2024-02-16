@@ -96,5 +96,12 @@ namespace ApiLoteriaNacional.Controllers
 
         }
 
+        [HttpPost("ObtieneCalificacioCustionariosporPDS")]
+        public async Task<IActionResult> ObtieneCalificacioCustionariosporPDS([FromBody] CalificacionCuestionariosPDSDTO data)
+        {
+            return Ok(await _storeCheck.ObtieneCalificacioCustionariosporPDS(data));
+
+        }
+
     }
 }
