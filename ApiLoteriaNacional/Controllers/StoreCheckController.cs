@@ -89,5 +89,12 @@ namespace ApiLoteriaNacional.Controllers
 
         }
 
+        [HttpPost("ObtieneRankingPDS")]
+        public async Task<IActionResult> ObtieneRankingPDS()
+        {
+            return Ok(await _storeCheck.ObtieneRankingPDS());
+
+        }
+
     }
 }
