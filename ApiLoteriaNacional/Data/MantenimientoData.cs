@@ -78,6 +78,8 @@ namespace ApiLoteriaNacional.Data
                 cmd.Parameters["@codigoSeccion"].Value = dato.codigoSeccion;
                 cmd.Parameters.Add("@nombreSeccion", SqlDbType.VarChar, 255);
                 cmd.Parameters["@nombreSeccion"].Value = dato.nombreSeccion;
+                cmd.Parameters.Add("@porcentajeCalificacion", SqlDbType.SmallInt);
+                cmd.Parameters["@porcentajeCalificacion"].Value = dato.porcentajeCalificacion;
                 cmd.Parameters.Add("@estadoSeccion", SqlDbType.Bit);
                 cmd.Parameters["@estadoSeccion"].Value = dato.estadoSeccion;
                 cmd.Parameters.Add("@usuarioTransaccion", SqlDbType.VarChar, 20);
