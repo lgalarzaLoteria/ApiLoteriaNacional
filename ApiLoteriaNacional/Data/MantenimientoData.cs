@@ -590,8 +590,13 @@ namespace ApiLoteriaNacional.Data
         }
         #endregion
 
+        #region Bases
+        
+        #endregion
+
         #region Procesos por Aplicacion
 
         #endregion
+
     }
 }
