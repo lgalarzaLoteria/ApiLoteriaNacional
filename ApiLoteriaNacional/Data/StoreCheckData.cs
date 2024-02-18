@@ -513,6 +513,56 @@ namespace ApiLoteriaNacional.Data
                 sql.Close();
             }
         }
+        public async Task<RespuestaDTO> ObtienePDSPorRangoCumplimiento(RankingCumplimientoPDSDTO dato)
+        {
+            int respuesta = 0;
+            using SqlConnection sql = new SqlConnection(_cadenaConexion);
+            using SqlCommand cmd = new SqlCommand("dbo.obtienePDSPorRangoCumplimiento", sql);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            await sql.OpenAsync();
+
+            try
+            {
+                cmd.Parameters.Add("@rango", SqlDbType.Int);
+                cmd.Parameters["@rango"].Value = dato.grupo;
+                cmd.Parameters.Add("@co_msg", SqlDbType.Int).Direction = ParameterDirection.Output;
+                cmd.Parameters.Add("@ds_msg", SqlDbType.VarChar, 250).Direction = ParameterDirection.Output;
+                var reader = await cmd.ExecuteReaderAsync();
+
+                DataTable dtDatos = new DataTable();
+                dtDatos.Load(reader);
+                reader.Close();
+
+                return new RespuestaDTO(
+                    Convert.ToInt32(cmd.Parameters["@co_msg"].Value),
+                    Convert.ToString(cmd.Parameters["@ds_msg"].Value),
+                    JsonConvert.SerializeObject(dtDatos)
+                    );
+
+            }
+            catch (SqlException ex)
+            {
+                try
+                {
+                    return new RespuestaDTO(ex.ErrorCode, ex.Message, "");
+                }
+                catch (Exception ex2)
+                {
+                    return new RespuestaDTO(ex.ErrorCode, ex2.Message, "");
+                }
+            }
+            catch (Exception e)
+            {
+                return new RespuestaDTO(-1, e.Message, "");
+            }
+            finally
+            {
+                sql.Close();
+            }
+
+
+        }
+
         public async Task<RespuestaDTO> ObtieneCalificacioCustionariosporPDS(CalificacionCuestionariosPDSDTO dato)
         {
             int respuesta = 0;
