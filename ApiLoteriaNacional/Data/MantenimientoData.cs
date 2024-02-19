@@ -246,6 +246,8 @@ namespace ApiLoteriaNacional.Data
                 cmd.Parameters["@codigoSeccion"].Value = dato.codigoSeccion;
                 cmd.Parameters.Add("@descripcionPregunta", SqlDbType.VarChar, 255);
                 cmd.Parameters["@descripcionPregunta"].Value = dato.descripcionPregunta;
+                cmd.Parameters.Add("@conceptoPregunta", SqlDbType.VarChar, 255);
+                cmd.Parameters["@conceptoPregunta"].Value = dato.conceptoPregunta;
                 cmd.Parameters.Add("@vigenciaDesde", SqlDbType.DateTime);
                 cmd.Parameters["@vigenciaDesde"].Value = dato.vigenciaDesde;
                 cmd.Parameters.Add("@vigenciaHasta", SqlDbType.DateTime);
