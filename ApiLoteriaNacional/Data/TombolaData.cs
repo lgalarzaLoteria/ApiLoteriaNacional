@@ -26,14 +26,16 @@ namespace ApiLoteriaNacional.Data
             try
             {
                 using SqlConnection sql = new SqlConnection(_cadenaConexion);
-                string stringQuery = @"SELECT Tb1.*, Tb2.DescripcionPremio, Tb2.TipoPremio, CONVERT(varchar(30),Tb2.ValorPremio) AS ValorPremio, Tb3.DescripcionTombola, Tb3.EstadoTombola " +
-                "FROM dbo.tbDisenoPremioWebTombola AS Tb1 " +
-                "INNER JOIN dbo.tbPremioWebTombola AS Tb2 " +
-                "ON Tb1.PremioWebTombolaId = Tb2.COD_tbPremioWebTombola " +
-                "INNER JOIN dbo.tbJuegoWebTombola AS Tb3 " +
-                "ON Tb1.JuegoWebTombolaId = Tb3.COD_tbJuegoWebTombola";
-                using SqlCommand cmd = new SqlCommand(stringQuery, sql);
-               
+
+                using SqlCommand cmd = new SqlCommand("dbo.spObtenerDisenoPremioWebTombola", sql);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.Parameters.Add("@tipoConsulta", SqlDbType.VarChar, 250).Direction = ParameterDirection.Input;
+                cmd.Parameters["@tipoConsulta"].Value = "ObtenerDisenoPremioWebTombola";
+                cmd.Parameters.Add("@id", SqlDbType.Int).Direction = ParameterDirection.Input;
+                cmd.Parameters["@id"].Value = -1;
+                cmd.Parameters.Add("@co_msg", SqlDbType.Int).Direction = ParameterDirection.Output;
+                cmd.Parameters.Add("@ds_msg", SqlDbType.VarChar, 250).Direction = ParameterDirection.Output;
+
                 await sql.OpenAsync();
                 var reader = await cmd.ExecuteReaderAsync();
 
@@ -42,11 +44,11 @@ namespace ApiLoteriaNacional.Data
                 reader.Close();
 
                 return new RespuestaDTO(
-                    200,
-                    "Ok",
+                    Convert.ToInt32(cmd.Parameters["@co_msg"].Value),
+                    cmd.Parameters["@ds_msg"].Value.ToString(),
                     JsonConvert.SerializeObject(dtDatos)
-                );
-                
+                    );
+
             }
             catch (Exception e)
             {
@@ -58,7 +60,15 @@ namespace ApiLoteriaNacional.Data
             try
             {
                 using SqlConnection sql = new SqlConnection(_cadenaConexion);
-                using SqlCommand cmd = new SqlCommand("SELECT TOP(1) Tb2.* FROM dbo.tbJuegoWebTombola AS Tb1 INNER JOIN dbo.tbDisenoPremioWebTombola AS Tb2  ON Tb1.COD_tbJuegoWebTombola = Tb2.JuegoWebTombolaId WHERE Tb1.EstadoTombola = 'Jugada' ORDER BY Tb1.COD_tbJuegoWebTombola DESC", sql);
+              
+                using SqlCommand cmd = new SqlCommand("dbo.spObtenerDisenoPremioWebTombola", sql);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.Parameters.Add("@tipoConsulta", SqlDbType.VarChar, 250).Direction = ParameterDirection.Input;
+                cmd.Parameters["@tipoConsulta"].Value = "ObtenerDisenoPremioWebTombolaUltimaJugada";
+                cmd.Parameters.Add("@id", SqlDbType.Int).Direction = ParameterDirection.Input;
+                cmd.Parameters["@id"].Value = -1;
+                cmd.Parameters.Add("@co_msg", SqlDbType.Int).Direction = ParameterDirection.Output;
+                cmd.Parameters.Add("@ds_msg", SqlDbType.VarChar, 250).Direction = ParameterDirection.Output;
 
                 await sql.OpenAsync();
                 var reader = await cmd.ExecuteReaderAsync();
@@ -67,11 +77,12 @@ namespace ApiLoteriaNacional.Data
                 dtDatos.Load(reader);
                 reader.Close();
 
+
                 return new RespuestaDTO(
-                    200,
-                    "Ok",
+                    Convert.ToInt32(cmd.Parameters["@co_msg"].Value),
+                    cmd.Parameters["@ds_msg"].Value.ToString(),
                     JsonConvert.SerializeObject(dtDatos)
-                );
+                    );
 
             }
             catch (Exception e)
@@ -84,7 +95,15 @@ namespace ApiLoteriaNacional.Data
             try
             {
                 using SqlConnection sql = new SqlConnection(_cadenaConexion);
-                using SqlCommand cmd = new SqlCommand("SELECT * FROM dbo.tbDisenoPremioWebTombola WHERE JuegoWebTombolaId = "+id.ToString(), sql);
+
+                using SqlCommand cmd = new SqlCommand("dbo.spObtenerDisenoPremioWebTombola", sql);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.Parameters.Add("@tipoConsulta", SqlDbType.VarChar, 250).Direction = ParameterDirection.Input;
+                cmd.Parameters["@tipoConsulta"].Value = "ObtenerDisenoPremioWebTombolaID";
+                cmd.Parameters.Add("@id", SqlDbType.Int).Direction = ParameterDirection.Input;
+                cmd.Parameters["@id"].Value = id;
+                cmd.Parameters.Add("@co_msg", SqlDbType.Int).Direction = ParameterDirection.Output;
+                cmd.Parameters.Add("@ds_msg", SqlDbType.VarChar, 250).Direction = ParameterDirection.Output;
 
                 await sql.OpenAsync();
                 var reader = await cmd.ExecuteReaderAsync();
@@ -94,10 +113,10 @@ namespace ApiLoteriaNacional.Data
                 reader.Close();
 
                 return new RespuestaDTO(
-                    200,
-                    "Ok",
+                    Convert.ToInt32(cmd.Parameters["@co_msg"].Value),
+                    cmd.Parameters["@ds_msg"].Value.ToString(),
                     JsonConvert.SerializeObject(dtDatos)
-                );
+                    );
 
             }
             catch (Exception e)
@@ -110,7 +129,15 @@ namespace ApiLoteriaNacional.Data
             try
             {
                 using SqlConnection sql = new SqlConnection(_cadenaConexion);
-                using SqlCommand cmd = new SqlCommand("SELECT TOP(1) * FROM dbo.tbDisenoPremioWebTombola WHERE PremioWebTombolaId = "+id.ToString(), sql);
+             
+                using SqlCommand cmd = new SqlCommand("dbo.spObtenerDisenoPremioWebTombola", sql);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.Parameters.Add("@tipoConsulta", SqlDbType.VarChar, 250).Direction = ParameterDirection.Input;
+                cmd.Parameters["@tipoConsulta"].Value = "ObtenerDisenoPremioWebTombolaIDpremio";
+                cmd.Parameters.Add("@id", SqlDbType.Int).Direction = ParameterDirection.Input;
+                cmd.Parameters["@id"].Value = id;
+                cmd.Parameters.Add("@co_msg", SqlDbType.Int).Direction = ParameterDirection.Output;
+                cmd.Parameters.Add("@ds_msg", SqlDbType.VarChar, 250).Direction = ParameterDirection.Output;
 
                 await sql.OpenAsync();
                 var reader = await cmd.ExecuteReaderAsync();
@@ -120,10 +147,10 @@ namespace ApiLoteriaNacional.Data
                 reader.Close();
 
                 return new RespuestaDTO(
-                    200,
-                    "Ok",
+                    Convert.ToInt32(cmd.Parameters["@co_msg"].Value),
+                    cmd.Parameters["@ds_msg"].Value.ToString(),
                     JsonConvert.SerializeObject(dtDatos)
-                );
+                    );
 
             }
             catch (Exception e)
@@ -135,11 +162,31 @@ namespace ApiLoteriaNacional.Data
         {
             try
             {
-                string stringSqlQuery = @"INSERT dbo.tbDisenoPremioWebTombola (PremioWebTombolaId,JuegoWebTombolaId,OrdenPremio,ColorPremio,ColorRGBPremio,EstadoPremio)" +
-                "VALUES (" + dato.PremioWebTombolaId + "," + dato.JuegoWebTombolaId + "," + dato.OrdenPremio + ",'" + dato.ColorPremio + "','" + dato.ColorRGBPremio + "','" + dato.EstadoPremio +"')";
-
                 using SqlConnection sql = new SqlConnection(_cadenaConexion);
-                using SqlCommand cmd = new SqlCommand(stringSqlQuery, sql);
+
+                using SqlCommand cmd = new SqlCommand("dbo.spAgregarDisenoPremioWebTombola", sql);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+
+                cmd.Parameters.Add("@PremioWebTombolaId", SqlDbType.Int).Direction = ParameterDirection.Input;
+                cmd.Parameters["@PremioWebTombolaId"].Value = dato.PremioWebTombolaId;
+
+                cmd.Parameters.Add("@JuegoWebTombolaId", SqlDbType.Int).Direction = ParameterDirection.Input;
+                cmd.Parameters["@JuegoWebTombolaId"].Value = dato.JuegoWebTombolaId;
+
+                cmd.Parameters.Add("@OrdenPremio", SqlDbType.Int).Direction = ParameterDirection.Input;
+                cmd.Parameters["@OrdenPremio"].Value = dato.OrdenPremio;
+
+                cmd.Parameters.Add("@ColorPremio", SqlDbType.VarChar, 50).Direction = ParameterDirection.Input;
+                cmd.Parameters["@ColorPremio"].Value = dato.ColorPremio;
+
+                cmd.Parameters.Add("@ColorRGBPremio", SqlDbType.VarChar, 20).Direction = ParameterDirection.Input;
+                cmd.Parameters["@ColorRGBPremio"].Value = dato.ColorRGBPremio;
+
+                cmd.Parameters.Add("@EstadoPremio", SqlDbType.VarChar, 20).Direction = ParameterDirection.Input;
+                cmd.Parameters["@EstadoPremio"].Value = dato.EstadoPremio;
+
+                cmd.Parameters.Add("@co_msg", SqlDbType.Int).Direction = ParameterDirection.Output;
+                cmd.Parameters.Add("@ds_msg", SqlDbType.VarChar, 250).Direction = ParameterDirection.Output;
 
                 await sql.OpenAsync();
                 var reader = await cmd.ExecuteReaderAsync();
@@ -158,8 +205,8 @@ namespace ApiLoteriaNacional.Data
                 };
 
                 return new RespuestaDTO(
-                    200,
-                    "Ok",
+                     Convert.ToInt32(cmd.Parameters["@co_msg"].Value),
+                    cmd.Parameters["@ds_msg"].Value.ToString(),
                     JsonConvert.SerializeObject(dtDatos)
                 );
             }
@@ -169,15 +216,38 @@ namespace ApiLoteriaNacional.Data
             }
         }
         public async Task<RespuestaDTO> ActualizarDisenoPremioWebTombola(TbDisenoPremioWebTombolaDTO dato)
-        {
+        { 
             try
             {
-                string stringSqlQuery = @"UPDATE dbo.tbDisenoPremioWebTombola SET " +
-                "PremioWebTombolaId = " + dato.PremioWebTombolaId + ",JuegoWebTombolaId = " + dato.JuegoWebTombolaId + ",OrdenPremio = " + dato.OrdenPremio + ",ColorPremio = '" + dato.ColorPremio + "',ColorRGBPremio = '" + dato.ColorRGBPremio + "',EstadoPremio = '" + dato.EstadoPremio +"'"+
-                "WHERE COD_tbDisenoPremioWebTombola = " + dato.COD_tbDisenoPremioWebTombola;
 
                 using SqlConnection sql = new SqlConnection(_cadenaConexion);
-                using SqlCommand cmd = new SqlCommand(stringSqlQuery, sql);
+
+                using SqlCommand cmd = new SqlCommand("dbo.spActualizarDisenoPremioWebTombola", sql);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+
+                cmd.Parameters.Add("@COD_tbDisenoPremioWebTombola", SqlDbType.Int).Direction = ParameterDirection.Input;
+                cmd.Parameters["@COD_tbDisenoPremioWebTombola"].Value = dato.COD_tbDisenoPremioWebTombola;
+
+                cmd.Parameters.Add("@PremioWebTombolaId", SqlDbType.Int).Direction = ParameterDirection.Input;
+                cmd.Parameters["@PremioWebTombolaId"].Value = dato.PremioWebTombolaId;
+
+                cmd.Parameters.Add("@JuegoWebTombolaId", SqlDbType.Int).Direction = ParameterDirection.Input;
+                cmd.Parameters["@JuegoWebTombolaId"].Value = dato.JuegoWebTombolaId;
+
+                cmd.Parameters.Add("@OrdenPremio", SqlDbType.Int).Direction = ParameterDirection.Input;
+                cmd.Parameters["@OrdenPremio"].Value = dato.OrdenPremio;
+
+                cmd.Parameters.Add("@ColorPremio", SqlDbType.VarChar, 50).Direction = ParameterDirection.Input;
+                cmd.Parameters["@ColorPremio"].Value = dato.ColorPremio;
+
+                cmd.Parameters.Add("@ColorRGBPremio", SqlDbType.VarChar, 20).Direction = ParameterDirection.Input;
+                cmd.Parameters["@ColorRGBPremio"].Value = dato.ColorRGBPremio;
+
+                cmd.Parameters.Add("@EstadoPremio", SqlDbType.VarChar, 20).Direction = ParameterDirection.Input;
+                cmd.Parameters["@EstadoPremio"].Value = dato.EstadoPremio;
+
+                cmd.Parameters.Add("@co_msg", SqlDbType.Int).Direction = ParameterDirection.Output;
+                cmd.Parameters.Add("@ds_msg", SqlDbType.VarChar, 250).Direction = ParameterDirection.Output;
 
                 await sql.OpenAsync();
                 var reader = await cmd.ExecuteReaderAsync();
@@ -196,8 +266,8 @@ namespace ApiLoteriaNacional.Data
                 };
 
                 return new RespuestaDTO(
-                    200,
-                    "Ok",
+                    Convert.ToInt32(cmd.Parameters["@co_msg"].Value),
+                     cmd.Parameters["@ds_msg"].Value.ToString(),
                     JsonConvert.SerializeObject(dtDatos)
                 );
             }
@@ -207,11 +277,19 @@ namespace ApiLoteriaNacional.Data
             }
         }
         public async Task<RespuestaDTO> EliminarDisenoPremioWebTombola(int id)
-        {
+        { 
             try
             {
                 using SqlConnection sql = new SqlConnection(_cadenaConexion);
-                using SqlCommand cmd = new SqlCommand("DELETE FROM dbo.tbDisenoPremioWebTombola WHERE COD_tbDisenoPremioWebTombola = "+id.ToString(), sql);
+              
+                using SqlCommand cmd = new SqlCommand("dbo.spEliminarDisenoPremioWebTombola", sql);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+
+                cmd.Parameters.Add("@id", SqlDbType.Int).Direction = ParameterDirection.Input;
+                cmd.Parameters["@id"].Value = id;
+
+                cmd.Parameters.Add("@co_msg", SqlDbType.Int).Direction = ParameterDirection.Output;
+                cmd.Parameters.Add("@ds_msg", SqlDbType.VarChar, 250).Direction = ParameterDirection.Output;
 
                 await sql.OpenAsync();
                 var reader = await cmd.ExecuteReaderAsync();
@@ -223,8 +301,8 @@ namespace ApiLoteriaNacional.Data
                 };
 
                 return new RespuestaDTO(
-                    200,
-                    "Ok",
+                    Convert.ToInt32(cmd.Parameters["@co_msg"].Value),
+                    cmd.Parameters["@ds_msg"].Value.ToString(),
                     JsonConvert.SerializeObject(dtDatos)
                 );
             }
@@ -244,11 +322,15 @@ namespace ApiLoteriaNacional.Data
             {
 
                 using SqlConnection sql = new SqlConnection(_cadenaConexion);
-                string stringQuery = @"SELECT Tb1.*, Tb2.DescripcionTombola " +
-               "FROM dbo.TbDisenoWebTombola AS Tb1 " +
-               "INNER JOIN dbo.tbJuegoWebTombola AS Tb2 " +
-               "ON Tb1.JuegoWebTombolaId = Tb2.COD_tbJuegoWebTombola ";
-                using SqlCommand cmd = new SqlCommand(stringQuery, sql);
+
+                using SqlCommand cmd = new SqlCommand("dbo.spObtenerDisenoWebTombola", sql);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.Parameters.Add("@tipoConsulta", SqlDbType.VarChar, 250).Direction = ParameterDirection.Input;
+                cmd.Parameters["@tipoConsulta"].Value = "ObtenerDisenoWebTombola";
+                cmd.Parameters.Add("@id", SqlDbType.Int).Direction = ParameterDirection.Input;
+                cmd.Parameters["@id"].Value = -1;
+                cmd.Parameters.Add("@co_msg", SqlDbType.Int).Direction = ParameterDirection.Output;
+                cmd.Parameters.Add("@ds_msg", SqlDbType.VarChar, 250).Direction = ParameterDirection.Output;
 
                 await sql.OpenAsync();
                 var reader = await cmd.ExecuteReaderAsync();
@@ -258,8 +340,8 @@ namespace ApiLoteriaNacional.Data
                 reader.Close();
 
                 return new RespuestaDTO(
-                    200,
-                    "Ok",
+                    Convert.ToInt32(cmd.Parameters["@co_msg"].Value),
+                    cmd.Parameters["@ds_msg"].Value.ToString(),
                     JsonConvert.SerializeObject(dtDatos)
                 );
 
@@ -274,7 +356,15 @@ namespace ApiLoteriaNacional.Data
             try
             {
                 using SqlConnection sql = new SqlConnection(_cadenaConexion);
-                using SqlCommand cmd = new SqlCommand("SELECT * FROM dbo.TbDisenoWebTombola WHERE COD_tbDisenoWebTombola = "+id.ToString(), sql);
+
+                using SqlCommand cmd = new SqlCommand("dbo.spObtenerDisenoWebTombola", sql);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.Parameters.Add("@tipoConsulta", SqlDbType.VarChar, 250).Direction = ParameterDirection.Input;
+                cmd.Parameters["@tipoConsulta"].Value = "ObtenerrDisenoWebTombolaID";
+                cmd.Parameters.Add("@id", SqlDbType.Int).Direction = ParameterDirection.Input;
+                cmd.Parameters["@id"].Value = id;
+                cmd.Parameters.Add("@co_msg", SqlDbType.Int).Direction = ParameterDirection.Output;
+                cmd.Parameters.Add("@ds_msg", SqlDbType.VarChar, 250).Direction = ParameterDirection.Output;
 
                 await sql.OpenAsync();
                 var reader = await cmd.ExecuteReaderAsync();
@@ -284,8 +374,8 @@ namespace ApiLoteriaNacional.Data
                 reader.Close();
 
                 return new RespuestaDTO(
-                    200,
-                    "Ok",
+                    Convert.ToInt32(cmd.Parameters["@co_msg"].Value),
+                    cmd.Parameters["@ds_msg"].Value.ToString(),
                     JsonConvert.SerializeObject(dtDatos)
                 );
 
@@ -300,7 +390,15 @@ namespace ApiLoteriaNacional.Data
             try
             {
                 using SqlConnection sql = new SqlConnection(_cadenaConexion);
-                using SqlCommand cmd = new SqlCommand("SELECT TOP(1) Tb2.* FROM dbo.tbJuegoWebTombola AS Tb1 INNER JOIN dbo.tbDisenoWebTombola AS Tb2  ON Tb1.COD_tbJuegoWebTombola = Tb2.JuegoWebTombolaId WHERE Tb1.EstadoTombola = 'Jugada' ORDER BY Tb1.COD_tbJuegoWebTombola DESC", sql);
+                //using SqlCommand cmd = new SqlCommand("SELECT TOP(1) Tb2.* FROM dbo.tbJuegoWebTombola AS Tb1 INNER JOIN dbo.tbDisenoWebTombola AS Tb2  ON Tb1.COD_tbJuegoWebTombola = Tb2.JuegoWebTombolaId WHERE Tb1.EstadoTombola = 'Jugada' ORDER BY Tb1.COD_tbJuegoWebTombola DESC", sql);
+                using SqlCommand cmd = new SqlCommand("dbo.spObtenerDisenoWebTombola", sql);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.Parameters.Add("@tipoConsulta", SqlDbType.VarChar, 250).Direction = ParameterDirection.Input;
+                cmd.Parameters["@tipoConsulta"].Value = "ObtenerDisenoWebTombolaUltimaJugada";
+                cmd.Parameters.Add("@id", SqlDbType.Int).Direction = ParameterDirection.Input;
+                cmd.Parameters["@id"].Value = -1;
+                cmd.Parameters.Add("@co_msg", SqlDbType.Int).Direction = ParameterDirection.Output;
+                cmd.Parameters.Add("@ds_msg", SqlDbType.VarChar, 250).Direction = ParameterDirection.Output;
 
                 await sql.OpenAsync();
                 var reader = await cmd.ExecuteReaderAsync();
@@ -310,8 +408,8 @@ namespace ApiLoteriaNacional.Data
                 reader.Close();
 
                 return new RespuestaDTO(
-                    200,
-                    "Ok",
+                    Convert.ToInt32(cmd.Parameters["@co_msg"].Value),
+                    cmd.Parameters["@ds_msg"].Value.ToString(),
                     JsonConvert.SerializeObject(dtDatos)
                 );
 
@@ -325,11 +423,26 @@ namespace ApiLoteriaNacional.Data
         {
             try
             {
-                string stringSqlQuery = @"INSERT dbo.tbDisenoWebTombola (JuegoWebTombolaId,ImgCentralTombola,ColorFondoWebTombola,ColorRGBFondoWebTombola)" +
-                "VALUES (" + dato.JuegoWebTombolaId + ",'" + dato.ImgCentralTombola + "','" + dato.ColorFondoWebTombola + "','" + dato.ColorRGBFondoWebTombola +"')";
-
+                
                 using SqlConnection sql = new SqlConnection(_cadenaConexion);
-                using SqlCommand cmd = new SqlCommand(stringSqlQuery, sql);
+               
+                using SqlCommand cmd = new SqlCommand("dbo.spAgregarDisenoWebTombola", sql);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+
+                cmd.Parameters.Add("@JuegoWebTombolaId", SqlDbType.Int).Direction = ParameterDirection.Input;
+                cmd.Parameters["@JuegoWebTombolaId"].Value = dato.JuegoWebTombolaId;
+
+                cmd.Parameters.Add("@ImgCentralTombola", SqlDbType.VarChar, 500).Direction = ParameterDirection.Input;
+                cmd.Parameters["@ImgCentralTombola"].Value = dato.ImgCentralTombola;
+
+                cmd.Parameters.Add("@ColorFondoWebTombola", SqlDbType.VarChar, 20).Direction = ParameterDirection.Input;
+                cmd.Parameters["@ColorFondoWebTombola"].Value = dato.ColorFondoWebTombola;
+
+                cmd.Parameters.Add("@ColorRGBFondoWebTombola", SqlDbType.VarChar, 20).Direction = ParameterDirection.Input;
+                cmd.Parameters["@ColorRGBFondoWebTombola"].Value = dato.ColorRGBFondoWebTombola;
+
+                cmd.Parameters.Add("@co_msg", SqlDbType.Int).Direction = ParameterDirection.Output;
+                cmd.Parameters.Add("@ds_msg", SqlDbType.VarChar, 250).Direction = ParameterDirection.Output;
 
                 await sql.OpenAsync();
                 var reader = await cmd.ExecuteReaderAsync();
@@ -347,8 +460,8 @@ namespace ApiLoteriaNacional.Data
                 };
 
                 return new RespuestaDTO(
-                    200,
-                    "Ok",
+                    Convert.ToInt32(cmd.Parameters["@co_msg"].Value),
+                    cmd.Parameters["@ds_msg"].Value.ToString(),
                     JsonConvert.SerializeObject(dtDatos)
                 );
             }
@@ -361,12 +474,29 @@ namespace ApiLoteriaNacional.Data
         {
             try
             {
-                string stringSqlQuery = @"UPDATE dbo.tbDisenoWebTombola SET " +
-                "JuegoWebTombolaId = " + dato.JuegoWebTombolaId + ",ImgCentralTombola = '" + dato.ImgCentralTombola + "',ColorFondoWebTombola = '" + dato.ColorFondoWebTombola + "',ColorRGBFondoWebTombola = '" + dato.ColorRGBFondoWebTombola +"'"+
-                "WHERE COD_tbDisenoWebTombola = " + dato.COD_tbDisenoWebTombola;
 
                 using SqlConnection sql = new SqlConnection(_cadenaConexion);
-                using SqlCommand cmd = new SqlCommand(stringSqlQuery, sql);
+
+                using SqlCommand cmd = new SqlCommand("dbo.spActualizarDisenoWebTombola", sql);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+
+                cmd.Parameters.Add("@COD_tbDisenoWebTombola", SqlDbType.Int).Direction = ParameterDirection.Input;
+                cmd.Parameters["@COD_tbDisenoWebTombola"].Value = dato.COD_tbDisenoWebTombola;
+
+                cmd.Parameters.Add("@JuegoWebTombolaId", SqlDbType.Int).Direction = ParameterDirection.Input;
+                cmd.Parameters["@JuegoWebTombolaId"].Value = dato.JuegoWebTombolaId;
+
+                cmd.Parameters.Add("@ImgCentralTombola", SqlDbType.VarChar, 500).Direction = ParameterDirection.Input;
+                cmd.Parameters["@ImgCentralTombola"].Value = dato.ImgCentralTombola;
+
+                cmd.Parameters.Add("@ColorFondoWebTombola", SqlDbType.VarChar, 20).Direction = ParameterDirection.Input;
+                cmd.Parameters["@ColorFondoWebTombola"].Value = dato.ColorFondoWebTombola;
+
+                cmd.Parameters.Add("@ColorRGBFondoWebTombola", SqlDbType.VarChar, 20).Direction = ParameterDirection.Input;
+                cmd.Parameters["@ColorRGBFondoWebTombola"].Value = dato.ColorRGBFondoWebTombola;
+
+                cmd.Parameters.Add("@co_msg", SqlDbType.Int).Direction = ParameterDirection.Output;
+                cmd.Parameters.Add("@ds_msg", SqlDbType.VarChar, 250).Direction = ParameterDirection.Output;
 
                 await sql.OpenAsync();
                 var reader = await cmd.ExecuteReaderAsync();
@@ -384,8 +514,8 @@ namespace ApiLoteriaNacional.Data
                 };
 
                 return new RespuestaDTO(
-                    200,
-                    "Ok",
+                    Convert.ToInt32(cmd.Parameters["@co_msg"].Value),
+                     cmd.Parameters["@ds_msg"].Value.ToString(),
                     JsonConvert.SerializeObject(dtDatos)
                 );
             }
@@ -395,11 +525,19 @@ namespace ApiLoteriaNacional.Data
             }
         }
         public async Task<RespuestaDTO> EliminarDisenoWebTombola(int id)
-        {
+        { 
             try
             {
                 using SqlConnection sql = new SqlConnection(_cadenaConexion);
-                using SqlCommand cmd = new SqlCommand("DELETE FROM dbo.tbDisenoWebTombola WHERE COD_tbDisenoWebTombola = "+id.ToString(), sql);
+
+                using SqlCommand cmd = new SqlCommand("dbo.spEliminarDisenoWebTombola", sql);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+
+                cmd.Parameters.Add("@id", SqlDbType.Int).Direction = ParameterDirection.Input;
+                cmd.Parameters["@id"].Value = id;
+
+                cmd.Parameters.Add("@co_msg", SqlDbType.Int).Direction = ParameterDirection.Output;
+                cmd.Parameters.Add("@ds_msg", SqlDbType.VarChar, 250).Direction = ParameterDirection.Output;
 
                 await sql.OpenAsync();
                 var reader = await cmd.ExecuteReaderAsync();
@@ -411,8 +549,8 @@ namespace ApiLoteriaNacional.Data
                 };
 
                 return new RespuestaDTO(
-                    200,
-                    "Ok",
+                    Convert.ToInt32(cmd.Parameters["@co_msg"].Value),
+                     cmd.Parameters["@ds_msg"].Value.ToString(),
                     JsonConvert.SerializeObject(dtDatos)
                 );
             }
@@ -427,11 +565,19 @@ namespace ApiLoteriaNacional.Data
         #region JuegoTombola
 
         public async Task<RespuestaDTO> ObtenerJuegoTombola()
-        {
+        { 
             try
             {
                 using SqlConnection sql = new SqlConnection(_cadenaConexion);
-                using SqlCommand cmd = new SqlCommand("SELECT * FROM dbo.tbJuegoWebTombola", sql);
+
+                using SqlCommand cmd = new SqlCommand("dbo.spObtenerJuegoTombola", sql);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.Parameters.Add("@tipoConsulta", SqlDbType.VarChar, 250).Direction = ParameterDirection.Input;
+                cmd.Parameters["@tipoConsulta"].Value = "ObtenerJuegoTombola";
+                cmd.Parameters.Add("@id", SqlDbType.Int).Direction = ParameterDirection.Input;
+                cmd.Parameters["@id"].Value = -1;
+                cmd.Parameters.Add("@co_msg", SqlDbType.Int).Direction = ParameterDirection.Output;
+                cmd.Parameters.Add("@ds_msg", SqlDbType.VarChar, 250).Direction = ParameterDirection.Output;
 
                 await sql.OpenAsync();
                 var reader = await cmd.ExecuteReaderAsync();
@@ -441,8 +587,8 @@ namespace ApiLoteriaNacional.Data
                 reader.Close();
 
                 return new RespuestaDTO(
-                    200,
-                    "Ok",
+                    Convert.ToInt32(cmd.Parameters["@co_msg"].Value),
+                    cmd.Parameters["@ds_msg"].Value.ToString(),
                     JsonConvert.SerializeObject(dtDatos)
                 );
 
@@ -457,7 +603,15 @@ namespace ApiLoteriaNacional.Data
             try
             {
                 using SqlConnection sql = new SqlConnection(_cadenaConexion);
-                using SqlCommand cmd = new SqlCommand("SELECT TOP(1) * FROM dbo.tbJuegoWebTombola WHERE EstadoTombola = 'En Curso'", sql);
+               
+                using SqlCommand cmd = new SqlCommand("dbo.spObtenerJuegoTombola", sql);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.Parameters.Add("@tipoConsulta", SqlDbType.VarChar, 250).Direction = ParameterDirection.Input;
+                cmd.Parameters["@tipoConsulta"].Value = "ObtenerJuegoTombolaEnCurso";
+                cmd.Parameters.Add("@id", SqlDbType.Int).Direction = ParameterDirection.Input;
+                cmd.Parameters["@id"].Value = -1;
+                cmd.Parameters.Add("@co_msg", SqlDbType.Int).Direction = ParameterDirection.Output;
+                cmd.Parameters.Add("@ds_msg", SqlDbType.VarChar, 250).Direction = ParameterDirection.Output;
 
                 await sql.OpenAsync();
                 var reader = await cmd.ExecuteReaderAsync();
@@ -467,8 +621,8 @@ namespace ApiLoteriaNacional.Data
                 reader.Close();
 
                 return new RespuestaDTO(
-                    200,
-                    "Ok",
+                    Convert.ToInt32(cmd.Parameters["@co_msg"].Value),
+                    cmd.Parameters["@ds_msg"].Value.ToString(),
                     JsonConvert.SerializeObject(dtDatos)
                 );
 
@@ -483,7 +637,15 @@ namespace ApiLoteriaNacional.Data
             try
             {
                 using SqlConnection sql = new SqlConnection(_cadenaConexion);
-                using SqlCommand cmd = new SqlCommand("SELECT * FROM dbo.tbJuegoWebTombola WHERE COD_tbJuegoWebTombola = "+id.ToString(), sql);
+
+                using SqlCommand cmd = new SqlCommand("dbo.spObtenerJuegoTombola", sql);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.Parameters.Add("@tipoConsulta", SqlDbType.VarChar, 250).Direction = ParameterDirection.Input;
+                cmd.Parameters["@tipoConsulta"].Value = "ObtenerJuegoTombolaID";
+                cmd.Parameters.Add("@id", SqlDbType.Int).Direction = ParameterDirection.Input;
+                cmd.Parameters["@id"].Value = id;
+                cmd.Parameters.Add("@co_msg", SqlDbType.Int).Direction = ParameterDirection.Output;
+                cmd.Parameters.Add("@ds_msg", SqlDbType.VarChar, 250).Direction = ParameterDirection.Output;
 
                 await sql.OpenAsync();
                 var reader = await cmd.ExecuteReaderAsync();
@@ -493,8 +655,8 @@ namespace ApiLoteriaNacional.Data
                 reader.Close();
 
                 return new RespuestaDTO(
-                    200,
-                    "Ok",
+                    Convert.ToInt32(cmd.Parameters["@co_msg"].Value),
+                    cmd.Parameters["@ds_msg"].Value.ToString(),
                     JsonConvert.SerializeObject(dtDatos)
                 );
 
@@ -508,12 +670,19 @@ namespace ApiLoteriaNacional.Data
         {
             try
             {
-                string stringSqlQuery = @"UPDATE dbo.tbJuegoWebTombola SET " +
-                "EstadoTombola = '" + estadoTombola +
-                "' WHERE COD_tbJuegoWebTombola = " + id;
-
                 using SqlConnection sql = new SqlConnection(_cadenaConexion);
-                using SqlCommand cmd = new SqlCommand(stringSqlQuery, sql);
+
+                using SqlCommand cmd = new SqlCommand("dbo.spActualizarEstadoTombolaPorID", sql);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+
+                cmd.Parameters.Add("@Id", SqlDbType.Int).Direction = ParameterDirection.Input;
+                cmd.Parameters["@Id"].Value = id;
+
+                cmd.Parameters.Add("@EstadoTombola", SqlDbType.VarChar, 20).Direction = ParameterDirection.Input;
+                cmd.Parameters["@EstadoTombola"].Value = estadoTombola;
+
+                cmd.Parameters.Add("@co_msg", SqlDbType.Int).Direction = ParameterDirection.Output;
+                cmd.Parameters.Add("@ds_msg", SqlDbType.VarChar, 250).Direction = ParameterDirection.Output;
 
                 await sql.OpenAsync();
                 var reader = await cmd.ExecuteReaderAsync();
@@ -541,14 +710,22 @@ namespace ApiLoteriaNacional.Data
             }
         }
         public async Task<RespuestaDTO> AgregarJuegoTombola(TbJuegoWebTombolaDTO dato)
-        {
+        { 
             try
             {
-                string stringSqlQuery = @"INSERT dbo.tbJuegoWebTombola (DescripcionTombola,EstadoTombola)" +
-                "VALUES ('" + dato.DescripcionTombola + "','" + dato.EstadoTombola + "')";
-
                 using SqlConnection sql = new SqlConnection(_cadenaConexion);
-                using SqlCommand cmd = new SqlCommand(stringSqlQuery, sql);
+
+                using SqlCommand cmd = new SqlCommand("dbo.spAgregarJuegoTombola", sql);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+
+                cmd.Parameters.Add("@DescripcionTombola", SqlDbType.VarChar, 100).Direction = ParameterDirection.Input;
+                cmd.Parameters["@DescripcionTombola"].Value = dato.DescripcionTombola;
+
+                cmd.Parameters.Add("@EstadoTombola", SqlDbType.VarChar, 20).Direction = ParameterDirection.Input;
+                cmd.Parameters["@EstadoTombola"].Value = dato.EstadoTombola;
+
+                cmd.Parameters.Add("@co_msg", SqlDbType.Int).Direction = ParameterDirection.Output;
+                cmd.Parameters.Add("@ds_msg", SqlDbType.VarChar, 250).Direction = ParameterDirection.Output;
 
                 await sql.OpenAsync();
                 var reader = await cmd.ExecuteReaderAsync();
@@ -564,8 +741,8 @@ namespace ApiLoteriaNacional.Data
                 };
 
                 return new RespuestaDTO(
-                    200,
-                    "Ok",
+                    Convert.ToInt32(cmd.Parameters["@co_msg"].Value),
+                    cmd.Parameters["@ds_msg"].Value.ToString(),
                     JsonConvert.SerializeObject(dtDatos)
                 );
             }
@@ -578,12 +755,23 @@ namespace ApiLoteriaNacional.Data
         {
             try
             {
-                string stringSqlQuery = @"UPDATE dbo.tbJuegoWebTombola SET " +
-                "DescripcionTombola = '" + dato.DescripcionTombola + "',EstadoTombola = '" + dato.EstadoTombola +"'"+
-                "WHERE COD_tbJuegoWebTombola = " + dato.COD_tbJuegoWebTombola;
 
                 using SqlConnection sql = new SqlConnection(_cadenaConexion);
-                using SqlCommand cmd = new SqlCommand(stringSqlQuery, sql);
+
+                using SqlCommand cmd = new SqlCommand("dbo.spActualizarJuegoTombola", sql);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+
+                cmd.Parameters.Add("@COD_tbJuegoWebTombola", SqlDbType.Int).Direction = ParameterDirection.Input;
+                cmd.Parameters["@COD_tbJuegoWebTombola"].Value = dato.COD_tbJuegoWebTombola;
+
+                cmd.Parameters.Add("@DescripcionTombola", SqlDbType.VarChar, 100).Direction = ParameterDirection.Input;
+                cmd.Parameters["@DescripcionTombola"].Value = dato.DescripcionTombola;
+
+                cmd.Parameters.Add("@EstadoTombola", SqlDbType.VarChar, 20).Direction = ParameterDirection.Input;
+                cmd.Parameters["@EstadoTombola"].Value = dato.EstadoTombola;
+
+                cmd.Parameters.Add("@co_msg", SqlDbType.Int).Direction = ParameterDirection.Output;
+                cmd.Parameters.Add("@ds_msg", SqlDbType.VarChar, 250).Direction = ParameterDirection.Output;
 
                 await sql.OpenAsync();
                 var reader = await cmd.ExecuteReaderAsync();
@@ -599,8 +787,8 @@ namespace ApiLoteriaNacional.Data
                 };
 
                 return new RespuestaDTO(
-                    200,
-                    "Ok",
+                    Convert.ToInt32(cmd.Parameters["@co_msg"].Value),
+                     cmd.Parameters["@ds_msg"].Value.ToString(),
                     JsonConvert.SerializeObject(dtDatos)
                 );
             }
@@ -615,7 +803,15 @@ namespace ApiLoteriaNacional.Data
             try
             {
                 using SqlConnection sql = new SqlConnection(_cadenaConexion);
-                using SqlCommand cmd = new SqlCommand("DELETE FROM dbo.tbJuegoWebTombola WHERE COD_tbJuegoWebTombola = "+id.ToString(), sql);
+
+                using SqlCommand cmd = new SqlCommand("dbo.spEliminarJuegoTombola", sql);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+
+                cmd.Parameters.Add("@id", SqlDbType.Int).Direction = ParameterDirection.Input;
+                cmd.Parameters["@id"].Value = id;
+
+                cmd.Parameters.Add("@co_msg", SqlDbType.Int).Direction = ParameterDirection.Output;
+                cmd.Parameters.Add("@ds_msg", SqlDbType.VarChar, 250).Direction = ParameterDirection.Output;
 
                 await sql.OpenAsync();
                 var reader = await cmd.ExecuteReaderAsync();
@@ -627,8 +823,8 @@ namespace ApiLoteriaNacional.Data
                 };
 
                 return new RespuestaDTO(
-                    200,
-                    "Ok",
+                    Convert.ToInt32(cmd.Parameters["@co_msg"].Value),
+                     cmd.Parameters["@ds_msg"].Value.ToString(),
                     JsonConvert.SerializeObject(dtDatos)
                 );
             }
@@ -646,7 +842,15 @@ namespace ApiLoteriaNacional.Data
             try
             {
                 using SqlConnection sql = new SqlConnection(_cadenaConexion);
-                using SqlCommand cmd = new SqlCommand("SELECT * FROM dbo.tbPremioWebTombola", sql);
+
+                using SqlCommand cmd = new SqlCommand("dbo.spObtenerPremios", sql);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.Parameters.Add("@tipoConsulta", SqlDbType.VarChar, 250).Direction = ParameterDirection.Input;
+                cmd.Parameters["@tipoConsulta"].Value = "ObtenerPremios";
+                cmd.Parameters.Add("@id", SqlDbType.Int).Direction = ParameterDirection.Input;
+                cmd.Parameters["@id"].Value = -1;
+                cmd.Parameters.Add("@co_msg", SqlDbType.Int).Direction = ParameterDirection.Output;
+                cmd.Parameters.Add("@ds_msg", SqlDbType.VarChar, 250).Direction = ParameterDirection.Output;
 
                 await sql.OpenAsync();
                 var reader = await cmd.ExecuteReaderAsync();
@@ -656,8 +860,8 @@ namespace ApiLoteriaNacional.Data
                 reader.Close();
 
                 return new RespuestaDTO(
-                    200,
-                    "Ok",
+                    Convert.ToInt32(cmd.Parameters["@co_msg"].Value),
+                    cmd.Parameters["@ds_msg"].Value.ToString(),
                     JsonConvert.SerializeObject(dtDatos)
                 );
 
@@ -672,7 +876,15 @@ namespace ApiLoteriaNacional.Data
             try
             {
                 using SqlConnection sql = new SqlConnection(_cadenaConexion);
-                using SqlCommand cmd = new SqlCommand("SELECT * FROM dbo.tbPremioWebTombola WHERE COD_tbPremioWebTombola = "+id.ToString(), sql);
+
+                using SqlCommand cmd = new SqlCommand("dbo.spObtenerPremios", sql);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.Parameters.Add("@tipoConsulta", SqlDbType.VarChar, 250).Direction = ParameterDirection.Input;
+                cmd.Parameters["@tipoConsulta"].Value = "ObtenerPremiosID";
+                cmd.Parameters.Add("@id", SqlDbType.Int).Direction = ParameterDirection.Input;
+                cmd.Parameters["@id"].Value = id;
+                cmd.Parameters.Add("@co_msg", SqlDbType.Int).Direction = ParameterDirection.Output;
+                cmd.Parameters.Add("@ds_msg", SqlDbType.VarChar, 250).Direction = ParameterDirection.Output;
 
                 await sql.OpenAsync();
                 var reader = await cmd.ExecuteReaderAsync();
@@ -682,8 +894,8 @@ namespace ApiLoteriaNacional.Data
                 reader.Close();
 
                 return new RespuestaDTO(
-                    200,
-                    "Ok",
+                    Convert.ToInt32(cmd.Parameters["@co_msg"].Value),
+                    cmd.Parameters["@ds_msg"].Value.ToString(),
                     JsonConvert.SerializeObject(dtDatos)
                 );
 
@@ -697,11 +909,22 @@ namespace ApiLoteriaNacional.Data
         {
             try
             {
-                string stringSqlQuery = @"INSERT dbo.tbPremioWebTombola(TipoPremio,DescripcionPremio,ValorPremio)" +
-                "VALUES ('" + dato.TipoPremio + "','" + dato.DescripcionPremio + "',"+ dato.ValorPremio + ")";
-
                 using SqlConnection sql = new SqlConnection(_cadenaConexion);
-                using SqlCommand cmd = new SqlCommand(stringSqlQuery, sql);
+
+                using SqlCommand cmd = new SqlCommand("dbo.spAgregarPremio", sql);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+
+                cmd.Parameters.Add("@TipoPremio", SqlDbType.VarChar, 20).Direction = ParameterDirection.Input;
+                cmd.Parameters["@TipoPremio"].Value = dato.TipoPremio;
+
+                cmd.Parameters.Add("@DescripcionPremio", SqlDbType.VarChar, 100).Direction = ParameterDirection.Input;
+                cmd.Parameters["@DescripcionPremio"].Value = dato.DescripcionPremio;
+
+                cmd.Parameters.Add("@ValorPremio", SqlDbType.Decimal).Direction = ParameterDirection.Input;
+                cmd.Parameters["@ValorPremio"].Value = dato.ValorPremio;
+
+                cmd.Parameters.Add("@co_msg", SqlDbType.Int).Direction = ParameterDirection.Output;
+                cmd.Parameters.Add("@ds_msg", SqlDbType.VarChar, 250).Direction = ParameterDirection.Output;
 
                 await sql.OpenAsync();
                 var reader = await cmd.ExecuteReaderAsync();
@@ -718,8 +941,8 @@ namespace ApiLoteriaNacional.Data
                 };
 
                 return new RespuestaDTO(
-                    200,
-                    "Ok",
+                    Convert.ToInt32(cmd.Parameters["@co_msg"].Value),
+                    cmd.Parameters["@ds_msg"].Value.ToString(),
                     JsonConvert.SerializeObject(dtDatos)
                 );
             }
@@ -729,15 +952,28 @@ namespace ApiLoteriaNacional.Data
             }
         }
         public async Task<RespuestaDTO> ActualizarPremio(TbPremioWebTombolaDTO dato)
-        {
+        { 
             try
             {
-                string stringSqlQuery = @"UPDATE dbo.tbPremioWebTombola SET " +
-                "TipoPremio = '" + dato.TipoPremio + "',DescripcionPremio = '" + dato.DescripcionPremio +"',ValorPremio = "+ dato.ValorPremio + 
-                "WHERE COD_tbPremioWebTombola = " + dato.COD_tbPremioWebTombola;
-
                 using SqlConnection sql = new SqlConnection(_cadenaConexion);
-                using SqlCommand cmd = new SqlCommand(stringSqlQuery, sql);
+
+                using SqlCommand cmd = new SqlCommand("dbo.spActualizarPremio", sql);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+
+                cmd.Parameters.Add("@COD_tbPremioWebTombola", SqlDbType.Int).Direction = ParameterDirection.Input;
+                cmd.Parameters["@COD_tbPremioWebTombola"].Value = dato.COD_tbPremioWebTombola;
+
+                cmd.Parameters.Add("@TipoPremio", SqlDbType.VarChar, 20).Direction = ParameterDirection.Input;
+                cmd.Parameters["@TipoPremio"].Value = dato.TipoPremio;
+
+                cmd.Parameters.Add("@DescripcionPremio", SqlDbType.VarChar, 100).Direction = ParameterDirection.Input;
+                cmd.Parameters["@DescripcionPremio"].Value = dato.DescripcionPremio;
+
+                cmd.Parameters.Add("@ValorPremio", SqlDbType.Decimal).Direction = ParameterDirection.Input;
+                cmd.Parameters["@ValorPremio"].Value = dato.ValorPremio;
+
+                cmd.Parameters.Add("@co_msg", SqlDbType.Int).Direction = ParameterDirection.Output;
+                cmd.Parameters.Add("@ds_msg", SqlDbType.VarChar, 250).Direction = ParameterDirection.Output;
 
                 await sql.OpenAsync();
                 var reader = await cmd.ExecuteReaderAsync();
@@ -754,8 +990,8 @@ namespace ApiLoteriaNacional.Data
                 };
 
                 return new RespuestaDTO(
-                    200,
-                    "Ok",
+                    Convert.ToInt32(cmd.Parameters["@co_msg"].Value),
+                    cmd.Parameters["@ds_msg"].Value.ToString(),
                     JsonConvert.SerializeObject(dtDatos)
                 );
             }
@@ -770,7 +1006,15 @@ namespace ApiLoteriaNacional.Data
             try
             {
                 using SqlConnection sql = new SqlConnection(_cadenaConexion);
-                using SqlCommand cmd = new SqlCommand("DELETE FROM dbo.tbPremioWebTombola WHERE COD_tbPremioWebTombola = "+id.ToString(), sql);
+
+                using SqlCommand cmd = new SqlCommand("dbo.spEliminarPremio", sql);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+
+                cmd.Parameters.Add("@id", SqlDbType.Int).Direction = ParameterDirection.Input;
+                cmd.Parameters["@id"].Value = id;
+
+                cmd.Parameters.Add("@co_msg", SqlDbType.Int).Direction = ParameterDirection.Output;
+                cmd.Parameters.Add("@ds_msg", SqlDbType.VarChar, 250).Direction = ParameterDirection.Output;
 
                 await sql.OpenAsync();
                 var reader = await cmd.ExecuteReaderAsync();
@@ -782,8 +1026,8 @@ namespace ApiLoteriaNacional.Data
                 };
 
                 return new RespuestaDTO(
-                    200,
-                    "Ok",
+                    Convert.ToInt32(cmd.Parameters["@co_msg"].Value),
+                     cmd.Parameters["@ds_msg"].Value.ToString(),
                     JsonConvert.SerializeObject(dtDatos)
                 );
             }
