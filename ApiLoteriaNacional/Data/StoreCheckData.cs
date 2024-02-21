@@ -258,11 +258,11 @@ namespace ApiLoteriaNacional.Data
 
 
         }
-        public async Task<RespuestaDTO> RevisarFormulario(RegistroDTO dato)
+        public async Task<RespuestaDTO> RevisarFormularioSupervisor(RegistroDTO dato)
         {
             int respuesta = 0;
             using SqlConnection sql = new SqlConnection(_cadenaConexion);
-            using SqlCommand cmd = new SqlCommand("dbo.revisionFormulario", sql);
+            using SqlCommand cmd = new SqlCommand("dbo.revisionFormularioSupervisor", sql);
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
             await sql.OpenAsync();
             SqlTransaction sqlTransaccion = sql.BeginTransaction();

@@ -54,10 +54,10 @@ namespace ApiLoteriaNacional.Controllers
 
         }
 
-        [HttpPost("RevisarFormulario")]
-        public async Task<IActionResult> RevisarFormulario([FromBody] RegistroDTO data)
+        [HttpPost("RevisarFormularioSupervisor")]
+        public async Task<IActionResult> RevisarFormularioSupervisor([FromBody] RegistroDTO data)
         {
-            return Ok(await _storeCheck.RevisarFormulario(data));
+            return Ok(await _storeCheck.RevisarFormularioSupervisor(data));
 
         }
 
