@@ -104,6 +104,38 @@ namespace ApiLoteriaNacional.Data
                 return new RespuestaDTO(-1, e.Message, "");
             }
         }
+        public async Task<RespuestaDTO> obtieneRolUsuario(string codigoUsuario)
+        {
+            try
+            {
+                using SqlConnection sql = new SqlConnection(_cadenaConexion);
+                using SqlCommand cmd = new SqlCommand("obtenerRolUsuario", sql);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.Parameters.Add("@codigoUsuario", SqlDbType.VarChar, 20);
+                cmd.Parameters["@codigoUsuario"].Value = codigoUsuario;
+                cmd.Parameters.Add("@codigoError", SqlDbType.SmallInt).Direction = ParameterDirection.Output;
+                cmd.Parameters.Add("@mensajeError", SqlDbType.VarChar, 250).Direction = ParameterDirection.Output;
+
+                await sql.OpenAsync();
+                using var reader = await cmd.ExecuteReaderAsync();
+                DataTable dtDatos = new DataTable();
+                dtDatos.Load(reader);
+                reader.Close();
+
+                var response = new RespuestaDTO(
+                    Convert.ToInt32(cmd.Parameters["@codigoError"].Value),
+                    cmd.Parameters["@mensajeError"].Value.ToString(),
+                    JsonConvert.SerializeObject(dtDatos)
+                    )
+                    ;
+
+                return response;
+            }
+            catch (Exception e)
+            {
+                return new RespuestaDTO(-1, e.Message, "");
+            }
+        }
 
         #region Métodos Privados
         private string existeUsuarioCentral(LoginDTO usuario)
