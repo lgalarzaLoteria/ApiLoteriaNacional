@@ -31,5 +31,11 @@ namespace ApiLoteriaNacional.Controllers
             return Ok(await _seguridad.obtieneMenuUsuario(login.UserName));
             
         }
+        [HttpPost("ObtieneRolUsuario")]
+        public async Task<IActionResult> ObtieneRolUsuario(LoginDTO login)
+        {
+            return Ok(await _seguridad.obtieneRolUsuario(login.UserName));
+
+        }
     }
 }
