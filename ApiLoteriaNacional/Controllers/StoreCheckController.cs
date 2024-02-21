@@ -110,5 +110,12 @@ namespace ApiLoteriaNacional.Controllers
 
         }
 
+        [HttpPost("ObtieneRankingPDSPorSupervisor")]
+        public async Task<IActionResult> ObtieneRankingPDSPorSupervisor(ResumenGerencialZonasDTO dato)
+        {
+            return Ok(await _storeCheck.ObtieneRankingPDSPorSupervisor(dato));
+
+        }
+
     }
 }
