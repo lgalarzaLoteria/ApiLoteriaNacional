@@ -669,7 +669,7 @@ namespace ApiLoteriaNacional.Data
                 //cmd.Parameters.Add("@codigoSupervisor1", SqlDbType.VarChar, 20);
                 //cmd.Parameters["@codigoSupervisor1"].Value = dato.codigoSupervisor;
                 cmd.Parameters.Add("@codigoSupervisor", SqlDbType.VarChar, 20);
-                cmd.Parameters["@codigoSupervisor"].Value = dato.nombreSupervisor;
+                cmd.Parameters["@codigoSupervisor"].Value = dato.codigoSupervisor;
                 cmd.Parameters.Add("@co_msg", SqlDbType.Int).Direction = ParameterDirection.Output;
                 cmd.Parameters.Add("@ds_msg", SqlDbType.VarChar, 250).Direction = ParameterDirection.Output;
 
