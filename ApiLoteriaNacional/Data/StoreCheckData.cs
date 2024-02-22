@@ -611,7 +611,12 @@ namespace ApiLoteriaNacional.Data
 
 
         }
-        public async Task<RespuestaDTO> ObtieneRankingPDSPorSupervisor(ResumenGerencialZonasDTO dato)
+
+
+        #endregion
+
+        #region Supervisor
+        public async Task<RespuestaDTO> ObtieneRankingPDSPorSupervisor(RegistroFormularioDTO dato)
         {
             int respuesta = 0;
             using SqlConnection sql = new SqlConnection(_cadenaConexion);
@@ -620,8 +625,7 @@ namespace ApiLoteriaNacional.Data
             await sql.OpenAsync();
             try
             {
-                cmd.Parameters.Add("@codigoSupervisor", SqlDbType.VarChar,20);
-                //cmd.Parameters["@codigoSupervisor"].Value = dato.nombreSupervisor;
+                cmd.Parameters.Add("@codigoSupervisor", SqlDbType.VarChar, 20);
                 cmd.Parameters["@codigoSupervisor"].Value = dato.codigoSupervisor;
                 cmd.Parameters.Add("@co_msg", SqlDbType.Int).Direction = ParameterDirection.Output;
                 cmd.Parameters.Add("@ds_msg", SqlDbType.VarChar, 250).Direction = ParameterDirection.Output;
@@ -690,7 +694,8 @@ namespace ApiLoteriaNacional.Data
                 return new RespuestaDTO(-1, e.Message, "");
             }
         }
-        
+
+
         #endregion
     }
 }

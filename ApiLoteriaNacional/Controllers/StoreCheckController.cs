@@ -111,7 +111,7 @@ namespace ApiLoteriaNacional.Controllers
         }
 
         [HttpPost("ObtieneRankingPDSPorSupervisor")]
-        public async Task<IActionResult> ObtieneRankingPDSPorSupervisor(ResumenGerencialZonasDTO dato)
+        public async Task<IActionResult> ObtieneRankingPDSPorSupervisor([FromBody] RegistroFormularioDTO dato)
         {
             return Ok(await _storeCheck.ObtieneRankingPDSPorSupervisor(dato));
 
