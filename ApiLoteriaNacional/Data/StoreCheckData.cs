@@ -665,6 +665,7 @@ namespace ApiLoteriaNacional.Data
                 using SqlCommand cmd = new SqlCommand("dbo.obtieneFormulariosRevisadosPDSPorSupervisor", sql);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
 
+
                 cmd.Parameters.Add("@codigoSupervisor", SqlDbType.VarChar, 20);
                 cmd.Parameters["@codigoSupervisor"].Value = dato.codigoSupervisor;
                 cmd.Parameters.Add("@co_msg", SqlDbType.Int).Direction = ParameterDirection.Output;
