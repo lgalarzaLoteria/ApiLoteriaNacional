@@ -658,12 +658,12 @@ namespace ApiLoteriaNacional.Data
                 sql.Close();
             }
         }
-        public async Task<RespuestaDTO> ObtieneFormulariosRevisadosPDSPorSupervisor(RegistroFormularioDTO dato)
+        public async Task<RespuestaDTO> ObtieneRevisadosPorSupervisor(RegistroFormularioDTO dato)
         {
             try
             {
                 using SqlConnection sql = new SqlConnection(_cadenaConexion);
-                using SqlCommand cmd = new SqlCommand("dbo.obtieneFormulariosRevisadosPDSPorSupervisor", sql);
+                using SqlCommand cmd = new SqlCommand("dbo.obtieneRevisadosPorSupervisor", sql);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 cmd.Parameters.Add("@codigoSupervisor", SqlDbType.VarChar, 20);
                 cmd.Parameters["@codigoSupervisor"].Value = dato.codigoSupervisor;
@@ -690,10 +690,7 @@ namespace ApiLoteriaNacional.Data
                 return new RespuestaDTO(-1, e.Message, "");
             }
         }
-        public async Task<RespuestaDTO> ObtieneFormulariosRevisadosPDSPorJefe()
-        {
-            return null;
-        }
+        
         #endregion
     }
 }
