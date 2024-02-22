@@ -657,7 +657,39 @@ namespace ApiLoteriaNacional.Data
                 sql.Close();
             }
         }
+        public async Task<RespuestaDTO> ObtieneFormulariosRevisadosPDSPorSupervisor(RegistroFormularioDTO dato)
+        {
+            try
+            {
+                using SqlConnection sql = new SqlConnection(_cadenaConexion);
+                using SqlCommand cmd = new SqlCommand("dbo.obtieneFormulariosRevisadosPDSPorSupervisor", sql);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
 
+                cmd.Parameters.Add("@codigoSupervisor", SqlDbType.VarChar, 20);
+                cmd.Parameters["@codigoSupervisor"].Value = dato.codigoSupervisor;
+                cmd.Parameters.Add("@co_msg", SqlDbType.Int).Direction = ParameterDirection.Output;
+                cmd.Parameters.Add("@ds_msg", SqlDbType.VarChar, 250).Direction = ParameterDirection.Output;
+
+                await sql.OpenAsync();
+                var reader = await cmd.ExecuteReaderAsync();
+
+                DataTable dtDatos = new DataTable();
+                dtDatos.Load(reader);
+                reader.Close();
+
+                return new RespuestaDTO(
+                    Convert.ToInt32(cmd.Parameters["@co_msg"].Value),
+                    cmd.Parameters["@ds_msg"].Value.ToString(),
+                    JsonConvert.SerializeObject(dtDatos)
+                    )
+                    ;
+
+            }
+            catch (Exception e)
+            {
+                return new RespuestaDTO(-1, e.Message, "");
+            }
+        }
         #endregion
     }
 }
