@@ -123,5 +123,12 @@ namespace ApiLoteriaNacional.Controllers
             return Ok(await _storeCheck.ObtieneFormulariosRevisadosPDSPorSupervisor(data));
 
         }
+        [HttpPost("ObtieneFormulariosRevisadosPDSPorJefe")]
+        public async Task<IActionResult> ObtieneFormulariosRevisadosPDSPorJefe()
+        {
+            return Ok(await _storeCheck.ObtieneFormulariosRevisadosPDSPorJefe());
+
+        }
+
     }
 }
