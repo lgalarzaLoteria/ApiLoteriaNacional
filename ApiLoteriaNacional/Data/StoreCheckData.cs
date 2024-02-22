@@ -690,6 +690,10 @@ namespace ApiLoteriaNacional.Data
                 return new RespuestaDTO(-1, e.Message, "");
             }
         }
+        public async Task<RespuestaDTO> ObtieneFormulariosRevisadosPDSPorJefe()
+        {
+            return null;
+        }
         #endregion
     }
 }
