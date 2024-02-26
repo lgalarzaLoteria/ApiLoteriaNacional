@@ -316,6 +316,8 @@ namespace ApiLoteriaNacional.Data
 
                 cmd.Parameters.Add("@codigoSupervidor", SqlDbType.VarChar, 15);
                 cmd.Parameters["@codigoSupervidor"].Value = dato.codigoSupervisor;
+                cmd.Parameters.Add("@fechaHasta", SqlDbType.VarChar, 10);
+                cmd.Parameters["@fechaHasta"].Value = dato.fechaRegistro;
                 cmd.Parameters.Add("@co_msg", SqlDbType.Int).Direction = ParameterDirection.Output;
                 cmd.Parameters.Add("@ds_msg", SqlDbType.VarChar, 250).Direction = ParameterDirection.Output;
 
@@ -618,6 +620,11 @@ namespace ApiLoteriaNacional.Data
         #region Supervisor
         public async Task<RespuestaDTO> ObtieneRankingPDSPorSupervisor(RegistroFormularioDTO dato)
         {
+            if (dato.fechaRegistro == "string")
+                dato.fechaRegistro = null;
+            if (dato.fechaRevisionSupervisor == "string")
+                dato.fechaRevisionSupervisor = null;
+
             int respuesta = 0;
             using SqlConnection sql = new SqlConnection(_cadenaConexion);
             using SqlCommand cmd = new SqlCommand("dbo.obtieneRankingPDSporSupervisor", sql);
@@ -627,6 +634,10 @@ namespace ApiLoteriaNacional.Data
             {
                 cmd.Parameters.Add("@codigoSupervisor", SqlDbType.VarChar, 20);
                 cmd.Parameters["@codigoSupervisor"].Value = dato.codigoSupervisor;
+                cmd.Parameters.Add("@fechaDesde", SqlDbType.VarChar, 10);
+                cmd.Parameters["@fechaDesde"].Value = dato.fechaRegistro;
+                cmd.Parameters.Add("@fechaHasta", SqlDbType.VarChar, 10);
+                cmd.Parameters["@fechaHasta"].Value = dato.fechaRevisionSupervisor;
                 cmd.Parameters.Add("@co_msg", SqlDbType.Int).Direction = ParameterDirection.Output;
                 cmd.Parameters.Add("@ds_msg", SqlDbType.VarChar, 250).Direction = ParameterDirection.Output;
                 var reader = await cmd.ExecuteReaderAsync();
@@ -666,11 +677,20 @@ namespace ApiLoteriaNacional.Data
         {
             try
             {
+                if (dato.fechaRegistro == "string")
+                    dato.fechaRegistro = null;
+                if (dato.fechaRevisionSupervisor == "string")
+                    dato.fechaRevisionSupervisor = null;
+
                 using SqlConnection sql = new SqlConnection(_cadenaConexion);
                 using SqlCommand cmd = new SqlCommand("dbo.obtieneRevisadosPorSupervisor", sql);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 cmd.Parameters.Add("@codigoSupervisor", SqlDbType.VarChar, 20);
                 cmd.Parameters["@codigoSupervisor"].Value = dato.codigoSupervisor;
+                cmd.Parameters.Add("@fechaDesde", SqlDbType.VarChar, 10);
+                cmd.Parameters["@fechaDesde"].Value = dato.fechaRegistro;
+                cmd.Parameters.Add("@fechaHasta", SqlDbType.VarChar, 10);
+                cmd.Parameters["@fechaHasta"].Value = dato.fechaRevisionSupervisor;
                 cmd.Parameters.Add("@co_msg", SqlDbType.Int).Direction = ParameterDirection.Output;
                 cmd.Parameters.Add("@ds_msg", SqlDbType.VarChar, 250).Direction = ParameterDirection.Output;
 
