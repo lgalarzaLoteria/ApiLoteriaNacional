@@ -102,14 +102,7 @@ namespace ApiLoteriaNacional.Controllers
             return Ok(await _storeCheck.ObtienePDSPorRangoCumplimiento(data));
 
         }
-
-        [HttpPost("ObtieneCalificacioCustionariosporPDS")]
-        public async Task<IActionResult> ObtieneCalificacioCustionariosporPDS([FromBody] CalificacionCuestionariosPDSDTO data)
-        {
-            return Ok(await _storeCheck.ObtieneCalificacioCustionariosporPDS(data));
-
-        }
-
+        
         [HttpPost("ObtieneRankingPDSPorSupervisor")]
         public async Task<IActionResult> ObtieneRankingPDSPorSupervisor([FromBody] RegistroFormularioDTO dato)
         {
@@ -123,6 +116,15 @@ namespace ApiLoteriaNacional.Controllers
             return Ok(await _storeCheck.ObtieneRevisadosPorSupervisor(data));
 
         }
-        
+
+        [HttpPost("ObtieneCalificacioCustionariosporPDS")]
+        public async Task<IActionResult> ObtieneCalificacioCustionariosporPDS([FromBody] RegistroFormularioDTO data)
+        {
+            return Ok(await _storeCheck.ObtieneCalificacioCustionariosporPDS(data));
+
+        }
+
+
+
     }
 }
