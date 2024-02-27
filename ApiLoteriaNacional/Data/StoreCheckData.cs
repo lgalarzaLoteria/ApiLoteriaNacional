@@ -471,7 +471,7 @@ namespace ApiLoteriaNacional.Data
                 return new RespuestaDTO(-1, e.Message, "");
             }
         }
-        public async Task<RespuestaDTO> ObtieneRankingPDS()
+        public async Task<RespuestaDTO> ObtieneRankingPDS(RegistroFormularioDTO dato)
         {
             int respuesta = 0;
             using SqlConnection sql = new SqlConnection(_cadenaConexion);
@@ -480,6 +480,10 @@ namespace ApiLoteriaNacional.Data
             await sql.OpenAsync();
             try
             {
+                cmd.Parameters.Add("@fechaDesde", SqlDbType.VarChar, 10);
+                cmd.Parameters["@fechaDesde"].Value = dato.fechaRegistro;
+                cmd.Parameters.Add("@fechaHasta", SqlDbType.VarChar, 10);
+                cmd.Parameters["@fechaHasta"].Value = dato.fechaRevisionSupervisor;
                 cmd.Parameters.Add("@co_msg", SqlDbType.Int).Direction = ParameterDirection.Output;
                 cmd.Parameters.Add("@ds_msg", SqlDbType.VarChar, 250).Direction = ParameterDirection.Output;
                 var reader = await cmd.ExecuteReaderAsync();
@@ -565,7 +569,6 @@ namespace ApiLoteriaNacional.Data
 
         }
         
-
 
         #endregion
 

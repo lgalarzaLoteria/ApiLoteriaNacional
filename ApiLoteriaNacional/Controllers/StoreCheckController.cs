@@ -90,9 +90,9 @@ namespace ApiLoteriaNacional.Controllers
         }
 
         [HttpPost("ObtieneRankingPDS")]
-        public async Task<IActionResult> ObtieneRankingPDS()
+        public async Task<IActionResult> ObtieneRankingPDS(RegistroFormularioDTO dato)
         {
-            return Ok(await _storeCheck.ObtieneRankingPDS());
+            return Ok(await _storeCheck.ObtieneRankingPDS(dato));
 
         }
 
