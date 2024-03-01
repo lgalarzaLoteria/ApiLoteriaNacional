@@ -1,9 +1,5 @@
 ﻿using ApiLoteriaNacional.Data;
-using LoteriaNacionalDominio;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Xml.Linq;
-using static LoteriaNacionalDominio.MantenimientoDTO;
 using static LoteriaNacionalDominio.SeguridadDTO;
 using static LoteriaNacionalDominio.StoreCheckDTO;
 

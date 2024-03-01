@@ -427,7 +427,7 @@ namespace ApiLoteriaNacional.Data
         {
             int respuesta = 0;
             using SqlConnection sql = new SqlConnection(_cadenaConexion);
-            using SqlCommand cmd = new SqlCommand("dbo.revisionFormularioSupervisor", sql);
+            using SqlCommand cmd = new SqlCommand("dbo.revisionFormularioJefeComercial", sql);
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
             await sql.OpenAsync();
             SqlTransaction sqlTransaccion = sql.BeginTransaction();
