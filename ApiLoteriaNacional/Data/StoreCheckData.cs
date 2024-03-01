@@ -262,7 +262,7 @@ namespace ApiLoteriaNacional.Data
         {
             int respuesta = 0;
             using SqlConnection sql = new SqlConnection(_cadenaConexion);
-            using SqlCommand cmd = new SqlCommand("dbo.consultarFormulariosporPOS", sql);
+            using SqlCommand cmd = new SqlCommand("dbo.consultarFormulariosporPOSJefeComercial", sql);
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
             await sql.OpenAsync();
 
