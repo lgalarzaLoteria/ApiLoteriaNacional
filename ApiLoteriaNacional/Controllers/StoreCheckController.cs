@@ -153,5 +153,12 @@ namespace ApiLoteriaNacional.Controllers
 
         }
 
+        [HttpPost("ConsultarFormulariosporPOSJefeComercial")]
+        public async Task<IActionResult> ConsultarFormulariosporPOSJefeComercial([FromBody] ZonasPorSupervisorDTO data)
+        {
+            return Ok(await _storeCheck.ConsultarFormulariosporPOSJefeComercial(data));
+
+        }
+
     }
 }
