@@ -341,7 +341,55 @@ namespace ApiLoteriaNacional.Data
                 return new RespuestaDTO(-1, e.Message, "");
             }
         }
-        
+        public async Task<RespuestaDTO> RevisarFormularioJefeComercial(RegistroDTO dato)
+        {
+            int respuesta = 0;
+            using SqlConnection sql = new SqlConnection(_cadenaConexion);
+            using SqlCommand cmd = new SqlCommand("dbo.revisionFormularioSupervisor", sql);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            await sql.OpenAsync();
+            SqlTransaction sqlTransaccion = sql.BeginTransaction();
+            cmd.Transaction = sqlTransaccion;
+            try
+            {
+                cmd.Parameters.Add("@json", SqlDbType.NVarChar, -1);
+                cmd.Parameters["@json"].Value = JsonConvert.SerializeObject(dato);
+                cmd.Parameters.Add("@co_msg", SqlDbType.Int).Direction = ParameterDirection.Output;
+                cmd.Parameters.Add("@ds_msg", SqlDbType.VarChar, 250).Direction = ParameterDirection.Output;
+                respuesta = await cmd.ExecuteNonQueryAsync();
+                sqlTransaccion.Commit();
+
+                return new RespuestaDTO(
+                    Convert.ToInt32(cmd.Parameters["@co_msg"].Value),
+                    Convert.ToString(cmd.Parameters["@ds_msg"].Value),
+                    ""
+                    );
+
+            }
+            catch (SqlException ex)
+            {
+                try
+                {
+                    sqlTransaccion.Rollback();
+                    return new RespuestaDTO(ex.ErrorCode, ex.Message, "");
+                }
+                catch (Exception ex2)
+                {
+                    return new RespuestaDTO(ex.ErrorCode, ex2.Message, "");
+                }
+            }
+            catch (Exception e)
+            {
+                return new RespuestaDTO(-1, e.Message, "");
+            }
+            finally
+            {
+                sql.Close();
+            }
+
+
+        }
+
         #endregion
 
         #region Seguimiento
@@ -721,6 +769,154 @@ namespace ApiLoteriaNacional.Data
             }
 
 
+        }
+
+        #endregion
+
+        #region Jefe Comercial
+        public async Task<RespuestaDTO> ObtieneZonasPorJefeComercial(LoginDTO dato)
+        {
+            int respuesta = 0;
+            using SqlConnection sql = new SqlConnection(_cadenaConexion);
+            using SqlCommand cmd = new SqlCommand("dbo.obtieneZonasPorJefeComercial", sql);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            await sql.OpenAsync();
+            try
+            {
+                cmd.Parameters.Add("@codigoUsuario", SqlDbType.VarChar, 20);
+                cmd.Parameters["@codigoUsuario"].Value = dato.UserName;
+                cmd.Parameters.Add("@co_msg", SqlDbType.Int).Direction = ParameterDirection.Output;
+                cmd.Parameters.Add("@ds_msg", SqlDbType.VarChar, 250).Direction = ParameterDirection.Output;
+                var reader = await cmd.ExecuteReaderAsync();
+
+                DataTable dtDatos = new DataTable();
+                dtDatos.Load(reader);
+                reader.Close();
+
+                return new RespuestaDTO(
+                    Convert.ToInt32(cmd.Parameters["@co_msg"].Value),
+                    Convert.ToString(cmd.Parameters["@ds_msg"].Value),
+                    JsonConvert.SerializeObject(dtDatos)
+                    );
+
+            }
+            catch (SqlException ex)
+            {
+                try
+                {
+                    return new RespuestaDTO(ex.ErrorCode, ex.Message, "");
+                }
+                catch (Exception ex2)
+                {
+                    return new RespuestaDTO(ex.ErrorCode, ex2.Message, "");
+                }
+            }
+            catch (Exception e)
+            {
+                return new RespuestaDTO(-1, e.Message, "");
+            }
+            finally
+            {
+                sql.Close();
+            }
+
+
+        }
+        public async Task<RespuestaDTO> ObtieneRevisadosPorJefeComercial(RegistroFormularioDTO dato)
+        {
+            try
+            {
+                if (dato.fechaRegistro == "string")
+                    dato.fechaRegistro = null;
+                if (dato.fechaRevisionSupervisor == "string")
+                    dato.fechaRevisionSupervisor = null;
+
+                using SqlConnection sql = new SqlConnection(_cadenaConexion);
+                using SqlCommand cmd = new SqlCommand("dbo.obtieneRevisadosPorJefeComercial", sql);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.Parameters.Add("@codigoUsuario", SqlDbType.VarChar, 20);
+                cmd.Parameters["@codigoUsuario"].Value = dato.codigoJefeVentas;
+                cmd.Parameters.Add("@fechaDesde", SqlDbType.VarChar, 10);
+                cmd.Parameters["@fechaDesde"].Value = dato.fechaRegistro;
+                cmd.Parameters.Add("@fechaHasta", SqlDbType.VarChar, 10);
+                cmd.Parameters["@fechaHasta"].Value = dato.fechaRevisionSupervisor;
+                cmd.Parameters.Add("@co_msg", SqlDbType.Int).Direction = ParameterDirection.Output;
+                cmd.Parameters.Add("@ds_msg", SqlDbType.VarChar, 250).Direction = ParameterDirection.Output;
+
+                await sql.OpenAsync();
+                var reader = await cmd.ExecuteReaderAsync();
+
+                DataTable dtDatos = new DataTable();
+                dtDatos.Load(reader);
+                reader.Close();
+
+                return new RespuestaDTO(
+                    Convert.ToInt32(cmd.Parameters["@co_msg"].Value),
+                    cmd.Parameters["@ds_msg"].Value.ToString(),
+                    JsonConvert.SerializeObject(dtDatos)
+                    )
+                    ;
+
+            }
+            catch (Exception e)
+            {
+                return new RespuestaDTO(-1, e.Message, "");
+            }
+        }
+        public async Task<RespuestaDTO> ObtieneRankingPDSPorJefeComercial(RegistroFormularioDTO dato)
+        {
+            if (dato.fechaRegistro == "string")
+                dato.fechaRegistro = null;
+            if (dato.fechaRevisionSupervisor == "string")
+                dato.fechaRevisionSupervisor = null;
+
+            int respuesta = 0;
+            using SqlConnection sql = new SqlConnection(_cadenaConexion);
+            using SqlCommand cmd = new SqlCommand("dbo.obtieneRankingPDSporJefeComercial", sql);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            await sql.OpenAsync();
+            try
+            {
+                cmd.Parameters.Add("@codigoJefeComercial", SqlDbType.VarChar, 20);
+                cmd.Parameters["@codigoJefeComercial"].Value = dato.codigoJefeVentas;
+                cmd.Parameters.Add("@fechaDesde", SqlDbType.VarChar, 10);
+                cmd.Parameters["@fechaDesde"].Value = dato.fechaRegistro;
+                cmd.Parameters.Add("@fechaHasta", SqlDbType.VarChar, 10);
+                cmd.Parameters["@fechaHasta"].Value = dato.fechaRevisionSupervisor;
+                cmd.Parameters.Add("@co_msg", SqlDbType.Int).Direction = ParameterDirection.Output;
+                cmd.Parameters.Add("@ds_msg", SqlDbType.VarChar, 250).Direction = ParameterDirection.Output;
+                var reader = await cmd.ExecuteReaderAsync();
+
+                DataTable dtDatos = new DataTable();
+                dtDatos.Load(reader);
+                reader.Close();
+
+                return new RespuestaDTO(
+                    Convert.ToInt32(cmd.Parameters["@co_msg"].Value),
+                    Convert.ToString(cmd.Parameters["@ds_msg"].Value),
+                    JsonConvert.SerializeObject(dtDatos)
+                    );
+
+            }
+            catch (SqlException ex)
+            {
+                try
+                {
+                    return new RespuestaDTO(ex.ErrorCode, ex.Message, "");
+                }
+                catch (Exception ex2)
+                {
+                    return new RespuestaDTO(ex.ErrorCode, ex2.Message, "");
+                }
+            }
+            catch (Exception e)
+            {
+                return new RespuestaDTO(-1, e.Message, "");
+            }
+            finally
+            {
+                sql.Close();
+            }
         }
 
         #endregion

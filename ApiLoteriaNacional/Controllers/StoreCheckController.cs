@@ -125,6 +125,33 @@ namespace ApiLoteriaNacional.Controllers
         }
 
 
+        [HttpPost("ObtieneZonasPorJefeComercial")]
+        public async Task<IActionResult> ObtieneZonasPorJefeComercial([FromBody] LoginDTO data)
+        {
+            return Ok(await _storeCheck.ObtieneZonasPorJefeComercial(data));
+
+        }
+
+        [HttpPost("ObtieneRevisadosPorJefeComercial")]
+        public async Task<IActionResult> ObtieneRevisadosPorJefeComercial([FromBody] RegistroFormularioDTO data)
+        {
+            return Ok(await _storeCheck.ObtieneRevisadosPorJefeComercial(data));
+
+        }
+
+        [HttpPost("ObtieneRankingPDSPorJefeComercial")]
+        public async Task<IActionResult> ObtieneRankingPDSPorJefeComercial([FromBody] RegistroFormularioDTO dato)
+        {
+            return Ok(await _storeCheck.ObtieneRankingPDSPorJefeComercial(dato));
+
+        }
+
+        [HttpPost("RevisarFormularioJefeComercial")]
+        public async Task<IActionResult> RevisarFormularioJefeComercial([FromBody] RegistroDTO data)
+        {
+            return Ok(await _storeCheck.RevisarFormularioJefeComercial(data));
+
+        }
 
     }
 }
