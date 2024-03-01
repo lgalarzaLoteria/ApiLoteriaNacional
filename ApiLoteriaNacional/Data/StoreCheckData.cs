@@ -209,7 +209,7 @@ namespace ApiLoteriaNacional.Data
 
 
         }
-        public async Task<RespuestaDTO> ConsultarFormulariosporPOS(RegistroFormularioDTO dato)
+        public async Task<RespuestaDTO> ConsultarFormulariosporPOS(ZonasPorSupervisorDTO dato)
         {
             int respuesta = 0;
             using SqlConnection sql = new SqlConnection(_cadenaConexion);

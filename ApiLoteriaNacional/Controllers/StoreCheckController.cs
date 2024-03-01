@@ -48,7 +48,7 @@ namespace ApiLoteriaNacional.Controllers
         }
 
         [HttpPost("ConsultarFormulariosporPOS")]
-        public async Task<IActionResult> ConsultarFormulariosporPOS([FromBody] RegistroFormularioDTO data)
+        public async Task<IActionResult> ConsultarFormulariosporPOS([FromBody] ZonasPorSupervisorDTO data)
         {
             return Ok(await _storeCheck.ConsultarFormulariosporPOS(data));
 
