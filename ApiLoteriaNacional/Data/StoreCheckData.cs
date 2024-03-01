@@ -157,6 +157,39 @@ namespace ApiLoteriaNacional.Data
                 return new RespuestaDTO(-1, e.Message, "");
             }
         }
+        public async Task<RespuestaDTO> ConsultarFormularioIngresadoSupervisor(RegistroFormularioDTO dato)
+        {
+            try
+            {
+                using SqlConnection sql = new SqlConnection(_cadenaConexion);
+                using SqlCommand cmd = new SqlCommand("dbo.consultarFormularioIngresadoSupervisor", sql);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+
+                cmd.Parameters.Add("@codigoFormulario", SqlDbType.BigInt);
+                cmd.Parameters["@codigoFormulario"].Value = dato.codigoFormulario;
+                cmd.Parameters.Add("@co_msg", SqlDbType.Int).Direction = ParameterDirection.Output;
+                cmd.Parameters.Add("@ds_msg", SqlDbType.VarChar, 250).Direction = ParameterDirection.Output;
+
+                await sql.OpenAsync();
+                var reader = await cmd.ExecuteReaderAsync();
+
+                DataTable dtDatos = new DataTable();
+                dtDatos.Load(reader);
+                reader.Close();
+
+                return new RespuestaDTO(
+                    Convert.ToInt32(cmd.Parameters["@co_msg"].Value),
+                    cmd.Parameters["@ds_msg"].Value.ToString(),
+                    JsonConvert.SerializeObject(dtDatos)
+                    )
+                    ;
+
+            }
+            catch (Exception e)
+            {
+                return new RespuestaDTO(-1, e.Message, "");
+            }
+        }
 
         #endregion
 
