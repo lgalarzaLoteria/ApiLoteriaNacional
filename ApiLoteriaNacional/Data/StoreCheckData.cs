@@ -661,6 +661,10 @@ namespace ApiLoteriaNacional.Data
             {
                 cmd.Parameters.Add("@rango", SqlDbType.Int);
                 cmd.Parameters["@rango"].Value = dato.grupo;
+                cmd.Parameters.Add("@codigoUsuario", SqlDbType.VarChar, 20);
+                cmd.Parameters["@codigoUsuario"].Value = dato.codigoUsuario;
+                cmd.Parameters.Add("@tipoConsulta", SqlDbType.Char, 1);
+                cmd.Parameters["@tipoConsulta"].Value = dato.tipoConsulta;
                 cmd.Parameters.Add("@co_msg", SqlDbType.Int).Direction = ParameterDirection.Output;
                 cmd.Parameters.Add("@ds_msg", SqlDbType.VarChar, 250).Direction = ParameterDirection.Output;
                 var reader = await cmd.ExecuteReaderAsync();
