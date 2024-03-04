@@ -163,5 +163,12 @@ namespace ApiLoteriaNacional.Controllers
 
         }
 
+        [HttpPost("ObtieneZonasPorGerencia")]
+        public async Task<IActionResult> ObtieneZonasPorGerencia()
+        {
+            return Ok(await _storeCheck.ObtieneZonasPorGerencia());
+
+        }
+
     }
 }
