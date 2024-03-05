@@ -170,5 +170,19 @@ namespace ApiLoteriaNacional.Controllers
 
         }
 
+        [HttpPost("ObtieneDiasRetrasoRevisionSupervisor")]
+        public async Task<IActionResult> ObtieneTiempoRevisonSupervisor()
+        {
+            return Ok(await _storeCheck.ObtieneDiasRetrasoRevision("J"));
+
+        }
+
+        [HttpPost("ObtieneDiasRetrasoRevisionJefeComercial")]
+        public async Task<IActionResult> ObtieneTiempoRevisonJefeComercial()
+        {
+            return Ok(await _storeCheck.ObtieneDiasRetrasoRevision("G"));
+
+        }
+
     }
 }
