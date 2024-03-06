@@ -65,6 +65,8 @@ namespace ApiLoteriaNacional.Controllers
         {
             return Ok(await _tombola.ObtenerDisenoWebTombola());
         }
+
+
         [HttpPost("ObtenerrDisenoWebTombolaID")]
         public async Task<IActionResult> ObtenerrDisenoWebTombolaID(int id)
         {

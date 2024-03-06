@@ -13,6 +13,7 @@ builder.Services.AddScoped<SeguridadData>();
 builder.Services.AddScoped<MantenimientoData>();
 builder.Services.AddScoped<StoreCheckData>();
 builder.Services.AddScoped<TombolaData>();
+builder.Services.AddScoped<ComprobanteData>();
 
 builder.Services.AddCors(
     options => {
