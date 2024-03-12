@@ -24,7 +24,7 @@ namespace ApiLoteriaNacional.Data
                 using SqlCommand cmd = new SqlCommand("dbo.spComprobantesElectronicosEnvioExt", sql);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 cmd.Parameters.Add("@FechaProcesoDesde", SqlDbType.VarChar, 10).Direction = ParameterDirection.Input;
-                cmd.Parameters["@FechaProcesoDesde"].Value = "2016/09/06";
+                cmd.Parameters["@FechaProcesoDesde"].Value = "";
                 cmd.Parameters.Add("@co_msg", SqlDbType.Int).Direction = ParameterDirection.Output;
                 cmd.Parameters.Add("@ds_msg", SqlDbType.VarChar, 250).Direction = ParameterDirection.Output;
 
