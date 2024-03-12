@@ -21,7 +21,7 @@
 
   <ItemGroup>
     <Reference Include="LoteriaNacionalDominio">
-      <HintPath>..\..\LoteriaNacionalDominio\LoteriaNacionalDominio\bin\Debug\net6.0\LoteriaNacionalDominio.dll</HintPath>
+      <HintPath>..\..\LoteriaNacionalDominio\LoteriaNacionalDominio\bin\Release\net6.0\LoteriaNacionalDominio.dll</HintPath>
     </Reference>
   </ItemGroup>
 
