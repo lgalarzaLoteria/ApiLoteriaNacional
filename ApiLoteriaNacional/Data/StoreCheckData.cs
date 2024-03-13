@@ -353,6 +353,8 @@ namespace ApiLoteriaNacional.Data
             {
                 cmd.Parameters.Add("@json", SqlDbType.NVarChar, -1);
                 cmd.Parameters["@json"].Value = JsonConvert.SerializeObject(dato);
+                cmd.Parameters.Add("@evidenciaSupervisor", SqlDbType.NVarChar, -1);
+                cmd.Parameters["@evidenciaSupervisor"].Value = dato.evidenciaRevision;
                 cmd.Parameters.Add("@co_msg", SqlDbType.Int).Direction = ParameterDirection.Output;
                 cmd.Parameters.Add("@ds_msg", SqlDbType.VarChar, 250).Direction = ParameterDirection.Output;
                 respuesta = await cmd.ExecuteNonQueryAsync();
@@ -436,6 +438,8 @@ namespace ApiLoteriaNacional.Data
             {
                 cmd.Parameters.Add("@json", SqlDbType.NVarChar, -1);
                 cmd.Parameters["@json"].Value = JsonConvert.SerializeObject(dato);
+                cmd.Parameters.Add("@evidenciaJefeVentas", SqlDbType.NVarChar, -1);
+                cmd.Parameters["@evidenciaJefeVentas"].Value = dato.evidenciaRevision;
                 cmd.Parameters.Add("@co_msg", SqlDbType.Int).Direction = ParameterDirection.Output;
                 cmd.Parameters.Add("@ds_msg", SqlDbType.VarChar, 250).Direction = ParameterDirection.Output;
                 respuesta = await cmd.ExecuteNonQueryAsync();
