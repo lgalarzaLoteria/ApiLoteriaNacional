@@ -58,9 +58,9 @@ namespace ApiLoteriaNacional.Controllers
         }
 
         [HttpPost("RevisarFormularioSupervisor")]
-        public async Task<IActionResult> RevisarFormularioSupervisor([FromBody] RegistroDTO data)
+        public async Task<IActionResult> RevisarFormularioSupervisor([FromBody] RegistroDTO data, string evidenciaRevision)
         {
-            return Ok(await _storeCheck.RevisarFormularioSupervisor(data));
+            return Ok(await _storeCheck.RevisarFormularioSupervisor(data,evidenciaRevision));
 
         }
 
@@ -150,9 +150,9 @@ namespace ApiLoteriaNacional.Controllers
         }
 
         [HttpPost("RevisarFormularioJefeComercial")]
-        public async Task<IActionResult> RevisarFormularioJefeComercial([FromBody] RegistroDTO data)
+        public async Task<IActionResult> RevisarFormularioJefeComercial([FromBody] RegistroDTO data, string evidenciaRevision)
         {
-            return Ok(await _storeCheck.RevisarFormularioJefeComercial(data));
+            return Ok(await _storeCheck.RevisarFormularioJefeComercial(data,evidenciaRevision));
 
         }
 

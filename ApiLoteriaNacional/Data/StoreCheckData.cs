@@ -340,7 +340,7 @@ namespace ApiLoteriaNacional.Data
 
 
         }
-        public async Task<RespuestaDTO> RevisarFormularioSupervisor(RegistroDTO dato)
+        public async Task<RespuestaDTO> RevisarFormularioSupervisor(RegistroDTO dato, string evidenciaRevision)
         {
             int respuesta = 0;
             using SqlConnection sql = new SqlConnection(_cadenaConexion);
@@ -353,6 +353,8 @@ namespace ApiLoteriaNacional.Data
             {
                 cmd.Parameters.Add("@json", SqlDbType.NVarChar, -1);
                 cmd.Parameters["@json"].Value = JsonConvert.SerializeObject(dato);
+                cmd.Parameters.Add("@evidenciaSupervisor", SqlDbType.NVarChar, -1);
+                cmd.Parameters["@evidenciaSupervisor"].Value = evidenciaRevision;
                 cmd.Parameters.Add("@co_msg", SqlDbType.Int).Direction = ParameterDirection.Output;
                 cmd.Parameters.Add("@ds_msg", SqlDbType.VarChar, 250).Direction = ParameterDirection.Output;
                 respuesta = await cmd.ExecuteNonQueryAsync();
@@ -423,7 +425,7 @@ namespace ApiLoteriaNacional.Data
                 return new RespuestaDTO(-1, e.Message, "");
             }
         }
-        public async Task<RespuestaDTO> RevisarFormularioJefeComercial(RegistroDTO dato)
+        public async Task<RespuestaDTO> RevisarFormularioJefeComercial(RegistroDTO dato, string evidenciaRevision)
         {
             int respuesta = 0;
             using SqlConnection sql = new SqlConnection(_cadenaConexion);
@@ -436,6 +438,8 @@ namespace ApiLoteriaNacional.Data
             {
                 cmd.Parameters.Add("@json", SqlDbType.NVarChar, -1);
                 cmd.Parameters["@json"].Value = JsonConvert.SerializeObject(dato);
+                cmd.Parameters.Add("@evidenciaJefeVentas", SqlDbType.NVarChar, -1);
+                cmd.Parameters["@evidenciaJefeVentas"].Value = evidenciaRevision;
                 cmd.Parameters.Add("@co_msg", SqlDbType.Int).Direction = ParameterDirection.Output;
                 cmd.Parameters.Add("@ds_msg", SqlDbType.VarChar, 250).Direction = ParameterDirection.Output;
                 respuesta = await cmd.ExecuteNonQueryAsync();
