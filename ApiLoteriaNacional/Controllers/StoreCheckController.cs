@@ -58,9 +58,9 @@ namespace ApiLoteriaNacional.Controllers
         }
 
         [HttpPost("RevisarFormularioSupervisor")]
-        public async Task<IActionResult> RevisarFormularioSupervisor([FromBody] RegistroDTO data, string evidenciaRevision)
+        public async Task<IActionResult> RevisarFormularioSupervisor([FromBody] RegistroDTO data)
         {
-            return Ok(await _storeCheck.RevisarFormularioSupervisor(data,evidenciaRevision));
+            return Ok(await _storeCheck.RevisarFormularioSupervisor(data));
 
         }
 
