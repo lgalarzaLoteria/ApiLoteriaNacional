@@ -10,6 +10,7 @@ using System.Reflection.Metadata.Ecma335;
 using static LoteriaNacionalDominio.StoreCheckDTO;
 using System.Collections.Generic;
 using static LoteriaNacionalDominio.SeguridadDTO;
+using Newtonsoft.Json.Converters;
 
 namespace ApiLoteriaNacional.Data
 {
@@ -1108,5 +1109,157 @@ namespace ApiLoteriaNacional.Data
 
 
         #endregion
+
+        #region Informes
+        public async Task<DataSet> ObtieneInformeSupervisor(long codigoFormulario)
+        {
+            using SqlConnection sql = new SqlConnection(_cadenaConexion);
+            using SqlCommand cmd = new SqlCommand("dbo.obtenerInformeSupervisor", sql);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            await sql.OpenAsync();
+            try
+            {
+                cmd.Parameters.Add("@codigoFormulario", SqlDbType.BigInt);
+                cmd.Parameters["@codigoFormulario"].Value = codigoFormulario;
+
+                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                DataSet dsDatos = new DataSet("dsInformeSupervisor");
+                await Task.Run(()=>adapter.Fill(dsDatos));
+                return dsDatos;
+
+            }
+            catch (SqlException ex)
+            {
+                try
+                {
+                    return null;
+                }
+                catch (Exception ex2)
+                {
+                    return null;
+                }
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+            finally
+            {
+                sql.Close();
+            }
+        }
+        public async Task<DataSet> ObtieneEvidenciaInformeSupervisor(long codigoFormulario)
+        {
+            using SqlConnection sql = new SqlConnection(_cadenaConexion);
+            using SqlCommand cmd = new SqlCommand("dbo.obtenerEvidenciaInformeSupervisor", sql);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            await sql.OpenAsync();
+            try
+            {
+                cmd.Parameters.Add("@codigoFormulario", SqlDbType.BigInt);
+                cmd.Parameters["@codigoFormulario"].Value = codigoFormulario;
+
+                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                DataSet dsDatos = new DataSet("dsEvidenciaInformeSupervisor");
+                await Task.Run(() => adapter.Fill(dsDatos));
+                return dsDatos;
+
+            }
+            catch (SqlException ex)
+            {
+                try
+                {
+                    return null;
+                }
+                catch (Exception ex2)
+                {
+                    return null;
+                }
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+            finally
+            {
+                sql.Close();
+            }
+        }
+        public async Task<DataSet> ObtieneInformeJefeVentas(long codigoFormulario)
+        {
+            using SqlConnection sql = new SqlConnection(_cadenaConexion);
+            using SqlCommand cmd = new SqlCommand("dbo.obtenerInformeJefeVentas", sql);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            await sql.OpenAsync();
+            try
+            {
+                cmd.Parameters.Add("@codigoFormulario", SqlDbType.BigInt);
+                cmd.Parameters["@codigoFormulario"].Value = codigoFormulario;
+
+                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                DataSet dsDatos = new DataSet("dsInformeJefeVentas");
+                await Task.Run(() => adapter.Fill(dsDatos));
+                return dsDatos;
+
+            }
+            catch (SqlException ex)
+            {
+                try
+                {
+                    return null;
+                }
+                catch (Exception ex2)
+                {
+                    return null;
+                }
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+            finally
+            {
+                sql.Close();
+            }
+        }
+        public async Task<DataSet> ObtieneEvidenciaInformeJefeVentas(long codigoFormulario)
+        {
+            using SqlConnection sql = new SqlConnection(_cadenaConexion);
+            using SqlCommand cmd = new SqlCommand("dbo.obtenerEvidenciaInformeJefeVentas", sql);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            await sql.OpenAsync();
+            try
+            {
+                cmd.Parameters.Add("@codigoFormulario", SqlDbType.BigInt);
+                cmd.Parameters["@codigoFormulario"].Value = codigoFormulario;
+
+                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                DataSet dsDatos = new DataSet("dsEvidenciaInformeJefeVentas");
+                await Task.Run(() => adapter.Fill(dsDatos));
+                return dsDatos;
+
+            }
+            catch (SqlException ex)
+            {
+                try
+                {
+                    return null;
+                }
+                catch (Exception ex2)
+                {
+                    return null;
+                }
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+            finally
+            {
+                sql.Close();
+            }
+        }
+        #endregion
     }
+
 }

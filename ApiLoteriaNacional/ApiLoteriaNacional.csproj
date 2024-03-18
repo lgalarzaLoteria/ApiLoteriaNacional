@@ -7,9 +7,21 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\Reports\InformeJefeVentas.rdlc" />
+    <Content Remove="wwwroot\Reports\InformeSupervisor.rdlc" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="wwwroot\Reports\InformeJefeVentas.rdlc" />
+    <EmbeddedResource Include="wwwroot\Reports\InformeSupervisor.rdlc" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AspNetCore.Reporting" Version="2.1.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.16" />
     <PackageReference Include="RestSharp" Version="110.2.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+    <PackageReference Include="System.CodeDom" Version="8.0.0" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.6" />
     <PackageReference Include="System.DirectoryServices" Version="8.0.0" />
     <PackageReference Include="System.ServiceModel.Duplex" Version="4.10.3" />
@@ -23,6 +35,52 @@
     <Reference Include="LoteriaNacionalDominio">
       <HintPath>..\..\LoteriaNacionalDominio\LoteriaNacionalDominio\bin\Release\net6.0\LoteriaNacionalDominio.dll</HintPath>
     </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="dsEvidenciaInformeSupervisor.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>dsEvidenciaInformeSupervisor.xsd</DependentUpon>
+    </Compile>
+    <Compile Update="dsEvidenciaJefeVentas.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>dsEvidenciaJefeVentas.xsd</DependentUpon>
+    </Compile>
+    <Compile Update="dsInformeJefeVentas.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>dsInformeJefeVentas.xsd</DependentUpon>
+    </Compile>
+    <Compile Update="dsInformeSupervisor.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>dsInformeSupervisor.xsd</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="dsEvidenciaInformeSupervisor.xsd">
+      <SubType>Designer</SubType>
+      <LastGenOutput>dsEvidenciaInformeSupervisor.Designer.cs</LastGenOutput>
+      <Generator>MSDataSetGenerator</Generator>
+    </None>
+    <None Update="dsEvidenciaJefeVentas.xsd">
+      <SubType>Designer</SubType>
+      <LastGenOutput>dsEvidenciaJefeVentas.Designer.cs</LastGenOutput>
+      <Generator>MSDataSetGenerator</Generator>
+    </None>
+    <None Update="dsInformeJefeVentas.xsd">
+      <SubType>Designer</SubType>
+      <LastGenOutput>dsInformeJefeVentas.Designer.cs</LastGenOutput>
+      <Generator>MSDataSetGenerator</Generator>
+    </None>
+    <None Update="dsInformeSupervisor.xsd">
+      <SubType>Designer</SubType>
+      <LastGenOutput>dsInformeSupervisor.Designer.cs</LastGenOutput>
+      <Generator>MSDataSetGenerator</Generator>
+    </None>
   </ItemGroup>
 
 </Project>
