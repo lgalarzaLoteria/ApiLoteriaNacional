@@ -1,4 +1,6 @@
 ﻿using ApiLoteriaNacional.Data;
+using AspNetCore.Reporting;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using static LoteriaNacionalDominio.SeguridadDTO;
 using static LoteriaNacionalDominio.StoreCheckDTO;
@@ -10,9 +12,12 @@ namespace ApiLoteriaNacional.Controllers
     public class StoreCheckController : Controller
     {
         private readonly StoreCheckData _storeCheck;
-        public StoreCheckController(StoreCheckData storeCheckData)
+        private readonly IWebHostEnvironment _webHostEnvironment;
+
+        public StoreCheckController(StoreCheckData storeCheckData, IWebHostEnvironment webHostEnvironment)
         {
             _storeCheck = storeCheckData ?? throw new ArgumentNullException(nameof(storeCheckData));
+            _webHostEnvironment = webHostEnvironment;
         }
 
         [HttpPost("LlenarFormulario")]
@@ -181,6 +186,44 @@ namespace ApiLoteriaNacional.Controllers
         public async Task<IActionResult> ObtieneTiempoRevisonJefeComercial()
         {
             return Ok(await _storeCheck.ObtieneDiasRetrasoRevision("G"));
+
+        }
+
+        [HttpPost("ObtieneInformeSupervisor")]
+        public async Task<IActionResult> ObtieneInformeSupervisor([FromBody] FormulariosporPOSDTO formulario)
+        {
+            string base64String = string.Empty;
+            var dsDatosInforme = await _storeCheck.ObtieneInformeSupervisor((long)formulario.codigoFormulario);
+            var dsDatosEvidenciaInforme = await _storeCheck.ObtieneEvidenciaInformeSupervisor((long)formulario.codigoFormulario);
+            string mimtype = "";
+            int extension = 1;
+            var path = $"{_webHostEnvironment.WebRootPath}\\Reports\\InformeSupervisor.rdlc";
+            LocalReport informeSupervisor = new LocalReport(path);
+            informeSupervisor.AddDataSource("dsInformeSupervisor", dsDatosInforme.Tables[0]);
+            informeSupervisor.AddDataSource("dsEvidenciaInformeSupervisor", dsDatosEvidenciaInforme.Tables[0]);
+            var result = informeSupervisor.Execute(RenderType.Pdf, extension, null, mimtype);
+            base64String = Convert.ToBase64String(result.MainStream, 0, result.MainStream.Length);
+
+            return Ok(base64String);
+
+        }
+
+        [HttpPost("ObtieneInformeJefeVentas")]
+        public async Task<IActionResult> ObtieneInformeJefeVentas([FromBody] FormulariosporPOSDTO formulario)
+        {
+            string base64String = string.Empty;
+            var dsDatosInforme = await _storeCheck.ObtieneInformeJefeVentas((long)formulario.codigoFormulario);
+            var dsDatosEvidenciaInforme = await _storeCheck.ObtieneEvidenciaInformeJefeVentas((long)formulario.codigoFormulario);
+            string mimtype = "";
+            int extension = 1;
+            var path = $"{_webHostEnvironment.WebRootPath}\\Reports\\InformeJefeVentas.rdlc";
+            LocalReport informeJefeVentas = new LocalReport(path);
+            informeJefeVentas.AddDataSource("dsInformeJefeVentas", dsDatosInforme.Tables[0]);
+            informeJefeVentas.AddDataSource("dsEvidenciaJefeVentas", dsDatosEvidenciaInforme.Tables[0]);
+            var result = informeJefeVentas.Execute(RenderType.Pdf, extension, null, mimtype);
+            base64String = Convert.ToBase64String(result.MainStream, 0, result.MainStream.Length);
+
+            return Ok(base64String);
 
         }
 
