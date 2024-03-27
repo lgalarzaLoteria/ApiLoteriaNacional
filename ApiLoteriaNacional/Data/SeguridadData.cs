@@ -77,7 +77,7 @@ namespace ApiLoteriaNacional.Data
             try
             {
                 using SqlConnection sql = new SqlConnection(_cadenaConexion);
-                using SqlCommand cmd = new SqlCommand("usuarioAccede", sql);
+                using SqlCommand cmd = new SqlCommand("spUsuarioAccede", sql);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 cmd.Parameters.Add("@codigoUsuario", SqlDbType.VarChar, 20);
                 cmd.Parameters["@codigoUsuario"].Value = codigoUsuario;
@@ -109,7 +109,7 @@ namespace ApiLoteriaNacional.Data
             try
             {
                 using SqlConnection sql = new SqlConnection(_cadenaConexion);
-                using SqlCommand cmd = new SqlCommand("obtenerRolUsuario", sql);
+                using SqlCommand cmd = new SqlCommand("spObtenerRolUsuario", sql);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 cmd.Parameters.Add("@codigoUsuario", SqlDbType.VarChar, 20);
                 cmd.Parameters["@codigoUsuario"].Value = codigoUsuario;
@@ -141,7 +141,7 @@ namespace ApiLoteriaNacional.Data
             try
             {
                 using SqlConnection sql = new SqlConnection(_cadenaConexion);
-                using SqlCommand cmd = new SqlCommand("obtenerPDSUsuario", sql);
+                using SqlCommand cmd = new SqlCommand("spObtenerPDSUsuario", sql);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 cmd.Parameters.Add("@codigoUsuario", SqlDbType.VarChar, 20);
                 cmd.Parameters["@codigoUsuario"].Value = codigoUsuario;

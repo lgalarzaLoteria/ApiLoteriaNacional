@@ -25,7 +25,7 @@ namespace ApiLoteriaNacional.Data
             try
             {
                 using SqlConnection sql = new SqlConnection(_cadenaConexion);
-                using SqlCommand cmd = new SqlCommand("dbo.mantenimientoSecciones", sql);
+                using SqlCommand cmd = new SqlCommand("dbo.spMantenimientoSecciones", sql);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 cmd.Parameters.Add("@usuarioTransaccion", SqlDbType.VarChar, 15);
                 cmd.Parameters["@usuarioTransaccion"].Value = dato.usuarioTransaccion;
@@ -60,7 +60,7 @@ namespace ApiLoteriaNacional.Data
         {
             int respuesta = 0;
             using SqlConnection sql = new SqlConnection(_cadenaConexion);
-            using SqlCommand cmd = new SqlCommand("dbo.mantenimientoSecciones", sql);
+            using SqlCommand cmd = new SqlCommand("dbo.spMantenimientoSecciones", sql);
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
             await sql.OpenAsync();
             SqlTransaction sqlTransaccion = sql.BeginTransaction();
@@ -128,7 +128,7 @@ namespace ApiLoteriaNacional.Data
             try
             {
                 using SqlConnection sql = new SqlConnection(_cadenaConexion);
-                using SqlCommand cmd = new SqlCommand("dbo.obtenerSecciones", sql);
+                using SqlCommand cmd = new SqlCommand("dbo.spObtenerSecciones", sql);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 cmd.Parameters.Add("@co_msg", SqlDbType.Int).Direction = ParameterDirection.Output;
                 cmd.Parameters.Add("@ds_msg", SqlDbType.VarChar, 250).Direction = ParameterDirection.Output;
@@ -157,7 +157,7 @@ namespace ApiLoteriaNacional.Data
             try
             {
                 using SqlConnection sql = new SqlConnection(_cadenaConexion);
-                using SqlCommand cmd = new SqlCommand("dbo.obtenerSeccionesFormulario", sql);
+                using SqlCommand cmd = new SqlCommand("dbo.spObtenerSeccionesFormulario", sql);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 cmd.Parameters.Add("@co_msg", SqlDbType.Int).Direction = ParameterDirection.Output;
                 cmd.Parameters.Add("@ds_msg", SqlDbType.VarChar, 250).Direction = ParameterDirection.Output;
@@ -189,7 +189,7 @@ namespace ApiLoteriaNacional.Data
             try
             {
                 using SqlConnection sql = new SqlConnection(_cadenaConexion);
-                using SqlCommand cmd = new SqlCommand("dbo.mantenimientoPreguntas", sql);
+                using SqlCommand cmd = new SqlCommand("dbo.spMantenimientoPreguntas", sql);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 cmd.Parameters.Add("@codigoSeccion", SqlDbType.SmallInt);
                 cmd.Parameters["@codigoSeccion"].Value = dato.codigoSeccion;
@@ -226,7 +226,7 @@ namespace ApiLoteriaNacional.Data
         {
             int respuesta = 0;
             using SqlConnection sql = new SqlConnection(_cadenaConexion);
-            using SqlCommand cmd = new SqlCommand("dbo.mantenimientoPreguntas", sql);
+            using SqlCommand cmd = new SqlCommand("dbo.spMantenimientoPreguntas", sql);
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
             await sql.OpenAsync();
             SqlTransaction sqlTransaccion = sql.BeginTransaction();
@@ -298,7 +298,7 @@ namespace ApiLoteriaNacional.Data
             try
             {
                 using SqlConnection sql = new SqlConnection(_cadenaConexion);
-                using SqlCommand cmd = new SqlCommand("dbo.obtenerPreguntas", sql);
+                using SqlCommand cmd = new SqlCommand("dbo.spObtenerPreguntas", sql);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 //cmd.Parameters.Add("@codigoSeccion", SqlDbType.SmallInt);
                 //cmd.Parameters["@codigoSeccion"].Value = dato.codigoSeccion;
@@ -334,7 +334,7 @@ namespace ApiLoteriaNacional.Data
             try
             {
                 using SqlConnection sql = new SqlConnection(_cadenaConexion);
-                using SqlCommand cmd = new SqlCommand("dbo.mantenimientoNovedades", sql);
+                using SqlCommand cmd = new SqlCommand("dbo.spMantenimientoNovedades", sql);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 cmd.Parameters.Add("@usuarioTransaccion", SqlDbType.VarChar, 15);
                 cmd.Parameters["@usuarioTransaccion"].Value = dato.usuarioTransaccion;
@@ -369,7 +369,7 @@ namespace ApiLoteriaNacional.Data
         {
             int respuesta = 0;
             using SqlConnection sql = new SqlConnection(_cadenaConexion);
-            using SqlCommand cmd = new SqlCommand("dbo.mantenimientoNovedades", sql);
+            using SqlCommand cmd = new SqlCommand("dbo.spMantenimientoNovedades", sql);
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
             await sql.OpenAsync();
             SqlTransaction sqlTransaccion = sql.BeginTransaction();
@@ -435,7 +435,7 @@ namespace ApiLoteriaNacional.Data
             try
             {
                 using SqlConnection sql = new SqlConnection(_cadenaConexion);
-                using SqlCommand cmd = new SqlCommand("dbo.obtenerNovedades", sql);
+                using SqlCommand cmd = new SqlCommand("dbo.spObtenerNovedades", sql);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 cmd.Parameters.Add("@co_msg", SqlDbType.Int).Direction = ParameterDirection.Output;
                 cmd.Parameters.Add("@ds_msg", SqlDbType.VarChar, 250).Direction = ParameterDirection.Output;

@@ -28,7 +28,7 @@ namespace ApiLoteriaNacional.Data
         {
             int respuesta = 0;
             using SqlConnection sql = new SqlConnection(_cadenaConexion);
-            using SqlCommand cmd = new SqlCommand("dbo.llenarFormulario", sql);
+            using SqlCommand cmd = new SqlCommand("dbo.spLlenarFormulario", sql);
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
             await sql.OpenAsync();
             SqlTransaction sqlTransaccion = sql.BeginTransaction();
@@ -81,7 +81,7 @@ namespace ApiLoteriaNacional.Data
         {
             int respuesta = 0;
             using SqlConnection sql = new SqlConnection(_cadenaConexion);
-            using SqlCommand cmd = new SqlCommand("dbo.actualizarFormulario", sql);
+            using SqlCommand cmd = new SqlCommand("dbo.spActualizarFormulario", sql);
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
             await sql.OpenAsync();
             SqlTransaction sqlTransaccion = sql.BeginTransaction();
@@ -130,7 +130,7 @@ namespace ApiLoteriaNacional.Data
             try
             {
                 using SqlConnection sql = new SqlConnection(_cadenaConexion);
-                using SqlCommand cmd = new SqlCommand("dbo.consultarFormularioIngresado", sql);
+                using SqlCommand cmd = new SqlCommand("dbo.spConsultarFormularioIngresado", sql);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
 
                 cmd.Parameters.Add("@codigoFormulario", SqlDbType.BigInt);
@@ -163,7 +163,7 @@ namespace ApiLoteriaNacional.Data
             try
             {
                 using SqlConnection sql = new SqlConnection(_cadenaConexion);
-                using SqlCommand cmd = new SqlCommand("dbo.consultarFormularioIngresadoSupervisor", sql);
+                using SqlCommand cmd = new SqlCommand("dbo.spConsultarFormularioIngresadoSupervisor", sql);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
 
                 cmd.Parameters.Add("@codigoFormulario", SqlDbType.BigInt);
@@ -199,7 +199,7 @@ namespace ApiLoteriaNacional.Data
         {
             int respuesta = 0;
             using SqlConnection sql = new SqlConnection(_cadenaConexion);
-            using SqlCommand cmd = new SqlCommand("dbo.obtieneZonasPorSupervisor", sql);
+            using SqlCommand cmd = new SqlCommand("dbo.spObtieneZonasPorSupervisor", sql);
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
             await sql.OpenAsync();
             try
@@ -247,7 +247,7 @@ namespace ApiLoteriaNacional.Data
         {
             int respuesta = 0;
             using SqlConnection sql = new SqlConnection(_cadenaConexion);
-            using SqlCommand cmd = new SqlCommand("dbo.consultarFormulariosporPOS", sql);
+            using SqlCommand cmd = new SqlCommand("dbo.spConsultarFormulariosporPOS", sql);
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
             await sql.OpenAsync();
             
@@ -296,7 +296,7 @@ namespace ApiLoteriaNacional.Data
         {
             int respuesta = 0;
             using SqlConnection sql = new SqlConnection(_cadenaConexion);
-            using SqlCommand cmd = new SqlCommand("dbo.consultarFormulariosporPOSJefeComercial", sql);
+            using SqlCommand cmd = new SqlCommand("dbo.spConsultarFormulariosporPOSJefeComercial", sql);
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
             await sql.OpenAsync();
 
@@ -345,7 +345,7 @@ namespace ApiLoteriaNacional.Data
         {
             int respuesta = 0;
             using SqlConnection sql = new SqlConnection(_cadenaConexion);
-            using SqlCommand cmd = new SqlCommand("dbo.revisionFormularioSupervisor", sql);
+            using SqlCommand cmd = new SqlCommand("dbo.spRevisionFormularioSupervisor", sql);
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
             await sql.OpenAsync();
             SqlTransaction sqlTransaccion = sql.BeginTransaction();
@@ -396,7 +396,7 @@ namespace ApiLoteriaNacional.Data
             try
             {
                 using SqlConnection sql = new SqlConnection(_cadenaConexion);
-                using SqlCommand cmd = new SqlCommand("dbo.consultarFormularioRevisado", sql);
+                using SqlCommand cmd = new SqlCommand("dbo.spConsultarFormularioRevisado", sql);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
 
                 cmd.Parameters.Add("@codigoSupervidor", SqlDbType.VarChar, 15);
@@ -430,7 +430,7 @@ namespace ApiLoteriaNacional.Data
         {
             int respuesta = 0;
             using SqlConnection sql = new SqlConnection(_cadenaConexion);
-            using SqlCommand cmd = new SqlCommand("dbo.revisionFormularioJefeComercial", sql);
+            using SqlCommand cmd = new SqlCommand("dbo.spRevisionFormularioJefeComercial", sql);
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
             await sql.OpenAsync();
             SqlTransaction sqlTransaccion = sql.BeginTransaction();
@@ -484,7 +484,7 @@ namespace ApiLoteriaNacional.Data
         {
             int respuesta = 0;
             using SqlConnection sql = new SqlConnection(_cadenaConexion);
-            using SqlCommand cmd = new SqlCommand("dbo.obtieneResumenGerencialZonas", sql);
+            using SqlCommand cmd = new SqlCommand("dbo.spObtieneResumenGerencialZonas", sql);
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
             await sql.OpenAsync();
             try
@@ -528,7 +528,7 @@ namespace ApiLoteriaNacional.Data
         {
             int respuesta = 0;
             using SqlConnection sql = new SqlConnection(_cadenaConexion);
-            using SqlCommand cmd = new SqlCommand("dbo.consultarFormulariosRevisadosporPOS", sql);
+            using SqlCommand cmd = new SqlCommand("dbo.spConsultarFormulariosRevisadosporPOS", sql);
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
             await sql.OpenAsync();
 
@@ -578,7 +578,7 @@ namespace ApiLoteriaNacional.Data
             try
             {
                 using SqlConnection sql = new SqlConnection(_cadenaConexion);
-                using SqlCommand cmd = new SqlCommand("dbo.consultarFormularioConNovedades", sql);
+                using SqlCommand cmd = new SqlCommand("dbo.spConsultarFormularioConNovedades", sql);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
 
                 cmd.Parameters.Add("@codigoFormulario", SqlDbType.VarChar, 15);
@@ -610,7 +610,7 @@ namespace ApiLoteriaNacional.Data
         {
             int respuesta = 0;
             using SqlConnection sql = new SqlConnection(_cadenaConexion);
-            using SqlCommand cmd = new SqlCommand("dbo.obtieneRankingPDS", sql);
+            using SqlCommand cmd = new SqlCommand("dbo.spObtieneRankingPDS", sql);
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
             await sql.OpenAsync();
             try
@@ -658,7 +658,7 @@ namespace ApiLoteriaNacional.Data
         {
             int respuesta = 0;
             using SqlConnection sql = new SqlConnection(_cadenaConexion);
-            using SqlCommand cmd = new SqlCommand("dbo.obtienePDSPorRangoCumplimiento", sql);
+            using SqlCommand cmd = new SqlCommand("dbo.spObtienePDSPorRangoCumplimiento", sql);
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
             await sql.OpenAsync();
 
@@ -721,7 +721,7 @@ namespace ApiLoteriaNacional.Data
 
             int respuesta = 0;
             using SqlConnection sql = new SqlConnection(_cadenaConexion);
-            using SqlCommand cmd = new SqlCommand("dbo.obtieneRankingPDSporSupervisor", sql);
+            using SqlCommand cmd = new SqlCommand("dbo.spObtieneRankingPDSporSupervisor", sql);
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
             await sql.OpenAsync();
             try
@@ -777,7 +777,7 @@ namespace ApiLoteriaNacional.Data
                     dato.fechaRevisionSupervisor = null;
 
                 using SqlConnection sql = new SqlConnection(_cadenaConexion);
-                using SqlCommand cmd = new SqlCommand("dbo.obtieneRevisadosPorSupervisor", sql);
+                using SqlCommand cmd = new SqlCommand("dbo.spObtieneRevisadosPorSupervisor", sql);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 cmd.Parameters.Add("@codigoSupervisor", SqlDbType.VarChar, 20);
                 cmd.Parameters["@codigoSupervisor"].Value = dato.codigoSupervisor;
@@ -812,7 +812,7 @@ namespace ApiLoteriaNacional.Data
         {
             int respuesta = 0;
             using SqlConnection sql = new SqlConnection(_cadenaConexion);
-            using SqlCommand cmd = new SqlCommand("dbo.obtieneCalificacioCustionariosporPDS", sql);
+            using SqlCommand cmd = new SqlCommand("dbo.spObtieneCalificacioCustionariosporPDS", sql);
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
             await sql.OpenAsync();
 
@@ -869,7 +869,7 @@ namespace ApiLoteriaNacional.Data
         {
             int respuesta = 0;
             using SqlConnection sql = new SqlConnection(_cadenaConexion);
-            using SqlCommand cmd = new SqlCommand("dbo.obtieneZonasPorJefeComercial", sql);
+            using SqlCommand cmd = new SqlCommand("dbo.spObtieneZonasPorJefeComercial", sql);
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
             await sql.OpenAsync();
             try
@@ -923,7 +923,7 @@ namespace ApiLoteriaNacional.Data
                     dato.fechaRevisionSupervisor = null;
 
                 using SqlConnection sql = new SqlConnection(_cadenaConexion);
-                using SqlCommand cmd = new SqlCommand("dbo.obtieneRevisadosPorJefeComercial", sql);
+                using SqlCommand cmd = new SqlCommand("dbo.spObtieneRevisadosPorJefeComercial", sql);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 cmd.Parameters.Add("@codigoUsuario", SqlDbType.VarChar, 20);
                 cmd.Parameters["@codigoUsuario"].Value = dato.codigoJefeVentas;
@@ -963,7 +963,7 @@ namespace ApiLoteriaNacional.Data
 
             int respuesta = 0;
             using SqlConnection sql = new SqlConnection(_cadenaConexion);
-            using SqlCommand cmd = new SqlCommand("dbo.obtieneRankingPDSporJefeComercial", sql);
+            using SqlCommand cmd = new SqlCommand("dbo.spObtieneRankingPDSporJefeComercial", sql);
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
             await sql.OpenAsync();
             try
@@ -1017,7 +1017,7 @@ namespace ApiLoteriaNacional.Data
         {
             int respuesta = 0;
             using SqlConnection sql = new SqlConnection(_cadenaConexion);
-            using SqlCommand cmd = new SqlCommand("dbo.obtieneZonasPorGerencia", sql);
+            using SqlCommand cmd = new SqlCommand("dbo.spObtieneZonasPorGerencia", sql);
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
             await sql.OpenAsync();
             try
@@ -1062,7 +1062,7 @@ namespace ApiLoteriaNacional.Data
         public async Task<RespuestaDTO> ObtieneDiasRetrasoRevision(string tipoConsulta)
         {
             using SqlConnection sql = new SqlConnection(_cadenaConexion);
-            using SqlCommand cmd = new SqlCommand("dbo.rankingTiempoRevision", sql);
+            using SqlCommand cmd = new SqlCommand("dbo.spRankingTiempoRevision", sql);
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
             await sql.OpenAsync();
             try
@@ -1114,7 +1114,7 @@ namespace ApiLoteriaNacional.Data
         public async Task<DataSet> ObtieneInformeSupervisor(long codigoFormulario)
         {
             using SqlConnection sql = new SqlConnection(_cadenaConexion);
-            using SqlCommand cmd = new SqlCommand("dbo.obtenerInformeSupervisor", sql);
+            using SqlCommand cmd = new SqlCommand("dbo.spObtenerInformeSupervisor", sql);
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
             await sql.OpenAsync();
             try
@@ -1151,7 +1151,7 @@ namespace ApiLoteriaNacional.Data
         public async Task<DataSet> ObtieneEvidenciaInformeSupervisor(long codigoFormulario)
         {
             using SqlConnection sql = new SqlConnection(_cadenaConexion);
-            using SqlCommand cmd = new SqlCommand("dbo.obtenerEvidenciaInformeSupervisor", sql);
+            using SqlCommand cmd = new SqlCommand("dbo.spObtenerEvidenciaInformeSupervisor", sql);
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
             await sql.OpenAsync();
             try
@@ -1188,7 +1188,7 @@ namespace ApiLoteriaNacional.Data
         public async Task<DataSet> ObtieneInformeJefeVentas(long codigoFormulario)
         {
             using SqlConnection sql = new SqlConnection(_cadenaConexion);
-            using SqlCommand cmd = new SqlCommand("dbo.obtenerInformeJefeVentas", sql);
+            using SqlCommand cmd = new SqlCommand("dbo.spObtenerInformeJefeVentas", sql);
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
             await sql.OpenAsync();
             try
@@ -1225,7 +1225,7 @@ namespace ApiLoteriaNacional.Data
         public async Task<DataSet> ObtieneEvidenciaInformeJefeVentas(long codigoFormulario)
         {
             using SqlConnection sql = new SqlConnection(_cadenaConexion);
-            using SqlCommand cmd = new SqlCommand("dbo.obtenerEvidenciaInformeJefeVentas", sql);
+            using SqlCommand cmd = new SqlCommand("dbo.spObtenerEvidenciaInformeJefeVentas", sql);
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
             await sql.OpenAsync();
             try
