@@ -168,6 +168,13 @@ namespace ApiLoteriaNacional.Controllers
 
         }
 
+        [HttpPost("ObtieneCalificacioCustionariosporPDSJefeComercial")]
+        public async Task<IActionResult> ObtieneCalificacioCustionariosporPDSJefeComercial([FromBody] RegistroFormularioDTO data)
+        {
+            return Ok(await _storeCheck.ObtieneCalificacioCustionariosporPDSJefeComercial(data));
+
+        }
+
         [HttpPost("ObtieneZonasPorGerencia")]
         public async Task<IActionResult> ObtieneZonasPorGerencia()
         {
