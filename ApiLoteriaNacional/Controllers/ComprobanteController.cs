@@ -29,9 +29,9 @@ namespace ApiLoteriaNacional.Controllers
         ////    return View();
         ////}
         [HttpGet("ConfirnarEnvioComprobantesExternos")]
-        public async Task<IActionResult> ConfirnarEnvioComprobantesExternos(string IdEnvioTrama, bool TranaConfirmada)
+        public async Task<IActionResult> ConfirnarEnvioComprobantesExternos(string IdEnvioTrama, bool TramaConfirmada)
         {
-            return Ok(await _ComproExtAdm.ConfirnarEnvioComprobantesExternos(IdEnvioTrama,  TranaConfirmada));
+            return Ok(await _ComproExtAdm.ConfirnarEnvioComprobantesExternos(IdEnvioTrama, TramaConfirmada));
         }
 
     }
