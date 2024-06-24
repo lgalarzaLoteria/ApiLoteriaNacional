@@ -48,5 +48,47 @@ namespace ApiLoteriaNacional.Data
             }
         }
 
+
+
+        // 2024/06/06 - Control para verificar si se envió la trama al servicio externo
+        public async Task<RespuestaDTO> ConfirnarEnvioComprobantesExternos(string IdEnvioTrama, bool TranaConfirmada)
+        {
+            using SqlConnection sql = new SqlConnection(_cadenaConexion);
+
+            try
+            {
+                int respuesta = 0;
+
+                using SqlCommand cmd = new SqlCommand("dbo.spComprobantesElectronicosConfirmarEnvioExt", sql);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.Parameters.Add("@IdEnvioTrama", SqlDbType.Int).Direction = ParameterDirection.Input;
+                cmd.Parameters.Add("@TramaConfirmada", SqlDbType.Bit).Direction = ParameterDirection.Input;
+                cmd.Parameters["@IdEnvioTrama"].Value = IdEnvioTrama;
+                cmd.Parameters["@TramaConfirmada"].Value = TranaConfirmada;
+                cmd.Parameters.Add("@co_msg", SqlDbType.Int).Direction = ParameterDirection.Output;
+                cmd.Parameters.Add("@ds_msg", SqlDbType.VarChar, 250).Direction = ParameterDirection.Output;
+
+                await sql.OpenAsync();
+
+                respuesta = await cmd.ExecuteNonQueryAsync();
+                return new RespuestaDTO(
+                    Convert.ToInt32(cmd.Parameters["@co_msg"].Value),
+                    Convert.ToString(cmd.Parameters["@ds_msg"].Value),
+                    ""
+                    );
+
+            }
+            catch (Exception e)
+            {
+                return new RespuestaDTO(-1, e.Message, "");
+            }
+            finally
+            {
+                sql.Close();
+            }
+        }
+
+
+
     }
 }
