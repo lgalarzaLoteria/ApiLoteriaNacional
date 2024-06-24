@@ -51,7 +51,7 @@ namespace ApiLoteriaNacional.Data
 
 
         // 2024/06/06 - Control para verificar si se envió la trama al servicio externo
-        public async Task<RespuestaDTO> ConfirnarEnvioComprobantesExternos(string IdEnvioTrama, bool TranaConfirmada)
+        public async Task<RespuestaDTO> ConfirnarEnvioComprobantesExternos(string IdEnvioTrama, bool TramaConfirmada)
         {
             using SqlConnection sql = new SqlConnection(_cadenaConexion);
 
@@ -64,7 +64,7 @@ namespace ApiLoteriaNacional.Data
                 cmd.Parameters.Add("@IdEnvioTrama", SqlDbType.Int).Direction = ParameterDirection.Input;
                 cmd.Parameters.Add("@TramaConfirmada", SqlDbType.Bit).Direction = ParameterDirection.Input;
                 cmd.Parameters["@IdEnvioTrama"].Value = IdEnvioTrama;
-                cmd.Parameters["@TramaConfirmada"].Value = TranaConfirmada;
+                cmd.Parameters["@TramaConfirmada"].Value = TramaConfirmada;
                 cmd.Parameters.Add("@co_msg", SqlDbType.Int).Direction = ParameterDirection.Output;
                 cmd.Parameters.Add("@ds_msg", SqlDbType.VarChar, 250).Direction = ParameterDirection.Output;
 
