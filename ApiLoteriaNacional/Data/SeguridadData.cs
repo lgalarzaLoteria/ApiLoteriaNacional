@@ -24,8 +24,9 @@ namespace ApiLoteriaNacional.Data
         public async Task<RespuestaDTO> LoginActiveDirectory(LoginDTO usuario)
         {
             string respuestaActiveDirectory = string.Empty;
-            RespuestaDTO loginRespuesta = new RespuestaDTO(0, "Ejecutado con exito",string.Empty);
-            
+            string dominioUsuarioEncontrado = string.Empty;
+            RespuestaDTO loginRespuesta = new RespuestaDTO(0, "Ejecutado con exito", string.Empty);
+
             try
             {
                 #region Active Directory
@@ -42,12 +43,14 @@ namespace ApiLoteriaNacional.Data
                     else
                     {
                         loginRespuesta.Body = respuestaActiveDirectory;
+                        dominioUsuarioEncontrado = "-PDS";
                     }
-                        
+
                 }
                 else
                 {
                     loginRespuesta.Body = respuestaActiveDirectory;
+                    dominioUsuarioEncontrado = "-CENTRAL";
                 }
 
                 #endregion
@@ -58,7 +61,7 @@ namespace ApiLoteriaNacional.Data
                 column.ColumnName = "NombreUsuario";
                 tabla.Columns.Add(column);
                 DataRow row = tabla.NewRow();
-                row["NombreUsuario"] = respuestaActiveDirectory;
+                row["NombreUsuario"] = string.Concat(respuestaActiveDirectory, dominioUsuarioEncontrado);
                 tabla.Rows.Add(row);
 
                 loginRespuesta.Body = JsonConvert.SerializeObject(tabla);
@@ -97,7 +100,7 @@ namespace ApiLoteriaNacional.Data
                     )
                     ;
 
-                return response; 
+                return response;
             }
             catch (Exception e)
             {
@@ -227,9 +230,10 @@ namespace ApiLoteriaNacional.Data
         }
         #endregion
 
-        
+
 
 
 
     }
 }
+
