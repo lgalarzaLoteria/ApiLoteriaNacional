@@ -234,5 +234,19 @@ namespace ApiLoteriaNacional.Controllers
 
         }
 
+        [HttpPost("ObtieneUbicacionPDS")]
+        public async Task<IActionResult> ObtieneUbicacionPDS([FromBody] GeolocalizacionDTO data)
+        {
+            return Ok(await _storeCheck.mantenimientoObtenerUbicacionPDS(data));
+
+        }
+
+        [HttpPost("GrabarUbicacionPDS")]
+        public async Task<IActionResult> GrabarUbicacionPDS([FromBody] GeolocalizacionDTO data)
+        {
+            return Ok(await _storeCheck.mantenimientoGrabarUbicacionPDS(data));
+
+        }
+
     }
 }
