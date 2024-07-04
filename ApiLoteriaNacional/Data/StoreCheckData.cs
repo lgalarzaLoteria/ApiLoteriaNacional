@@ -356,6 +356,12 @@ namespace ApiLoteriaNacional.Data
                 cmd.Parameters["@json"].Value = JsonConvert.SerializeObject(dato);
                 cmd.Parameters.Add("@evidenciaSupervisor", SqlDbType.NVarChar, -1);
                 cmd.Parameters["@evidenciaSupervisor"].Value = dato.evidenciaRevision;
+                cmd.Parameters.Add("@latitudEvidencia", SqlDbType.Decimal);
+                cmd.Parameters["@latitudEvidencia"].Value = dato.latitudEvidencia;
+                cmd.Parameters.Add("@longitudEvidencia", SqlDbType.Decimal);
+                cmd.Parameters["@longitudEvidencia"].Value = dato.longitudEvidencia;
+                cmd.Parameters.Add("@direccionEvidencia", SqlDbType.VarChar,500);
+                cmd.Parameters["@direccionEvidencia"].Value = dato.direccionEvidencia;
                 cmd.Parameters.Add("@co_msg", SqlDbType.Int).Direction = ParameterDirection.Output;
                 cmd.Parameters.Add("@ds_msg", SqlDbType.VarChar, 250).Direction = ParameterDirection.Output;
                 respuesta = await cmd.ExecuteNonQueryAsync();
@@ -1377,6 +1383,8 @@ namespace ApiLoteriaNacional.Data
                 cmd.Parameters["@latitudPDS"].Value = dato.latitudPDS;
                 cmd.Parameters.Add("@longitudPDS", SqlDbType.Decimal);
                 cmd.Parameters["@longitudPDS"].Value = dato.longitudPDS;
+                cmd.Parameters.Add("@direccionPDS", SqlDbType.VarChar, int.MaxValue);
+                cmd.Parameters["@direccionPDS"].Value = dato.direccionPDS;
                 cmd.Parameters.Add("@usuarioTransaccion", SqlDbType.VarChar, 20);
                 cmd.Parameters["@usuarioTransaccion"].Value = dato.usuarioTransaccion;
                 cmd.Parameters.Add("@equipoTransaccion", SqlDbType.VarChar, 250);
