@@ -248,5 +248,55 @@ namespace ApiLoteriaNacional.Controllers
 
         }
 
+        [HttpPost("MantenimientoActualizarUbicacionPDS")]
+        public async Task<IActionResult> MantenimientoActualizarUbicacionPDS([FromBody] GeolocalizacionDTO data)
+        {
+            return Ok(await _storeCheck.mantenimientoActualizarUbicacionPDS(data));
+
+        }
+
+        [HttpPost("GrabarEvidenciaTI")]
+        public async Task<IActionResult> GrabarEvidenciaTI([FromBody] RegistroElementosDTO evidenciaElementosTI)
+        {
+            return Ok(await _storeCheck.GrabarEvidenciaTI(evidenciaElementosTI));
+
+        }
+
+        [HttpPost("ObtenerEvidenciaTIxRangoFechas")]
+        public async Task<IActionResult> ObtenerEvidenciaTIxRangoFechas([FromBody] EvidenciaTIDTO dato)
+        {
+            return Ok(await _storeCheck.obtenerEvidenciaTIxRangoFechas(dato));
+
+        }
+
+        [HttpPost("ObtienePendientesSupervisorPorZona")]
+        public async Task<IActionResult> ObtienePendientesSupervisorPorZona()
+        {
+            return Ok(await _storeCheck.ObtienePendientesSupervisorPorZona());
+
+        }
+
+        [HttpPost("ObtienePendientesSupervisorPorPDSZona")]
+        public async Task<IActionResult> ObtienePendientesSupervisorPorPDSZona([FromBody] ZonasPorSupervisorDTO dato)
+        {
+            return Ok(await _storeCheck.ObtienePendientesSupervisorPorPDSZona(dato));
+
+        }
+
+        [HttpPost("ObtienePendientesJefeComercialPorZona")]
+        public async Task<IActionResult> ObtienePendientesJefeComercialPorZona()
+        {
+            return Ok(await _storeCheck.ObtienePendientesJefeComercialPorZona());
+
+        }
+
+        [HttpPost("ObtienePendientesJefeComercialPorPDSZona")]
+        public async Task<IActionResult> ObtienePendientesJefeComercialPorPDSZona([FromBody] ZonasPorSupervisorDTO dato)
+        {
+            return Ok(await _storeCheck.ObtienePendientesJefeComercialPorPDSZona(dato));
+
+        }
+
+
     }
 }

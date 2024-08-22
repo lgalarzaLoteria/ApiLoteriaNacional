@@ -447,6 +447,12 @@ namespace ApiLoteriaNacional.Data
                 cmd.Parameters["@json"].Value = JsonConvert.SerializeObject(dato);
                 cmd.Parameters.Add("@evidenciaJefeVentas", SqlDbType.NVarChar, -1);
                 cmd.Parameters["@evidenciaJefeVentas"].Value = dato.evidenciaRevision;
+                cmd.Parameters.Add("@latitudEvidencia", SqlDbType.VarChar, 100);
+                cmd.Parameters["@latitudEvidencia"].Value = dato.latitudEvidencia;
+                cmd.Parameters.Add("@longitudEvidencia", SqlDbType.VarChar, 100);
+                cmd.Parameters["@longitudEvidencia"].Value = dato.longitudEvidencia;
+                cmd.Parameters.Add("@direccionEvidencia", SqlDbType.VarChar, 500);
+                cmd.Parameters["@direccionEvidencia"].Value = dato.direccionEvidencia;
                 cmd.Parameters.Add("@co_msg", SqlDbType.Int).Direction = ParameterDirection.Output;
                 cmd.Parameters.Add("@ds_msg", SqlDbType.VarChar, 250).Direction = ParameterDirection.Output;
                 respuesta = await cmd.ExecuteNonQueryAsync();
@@ -482,6 +488,55 @@ namespace ApiLoteriaNacional.Data
 
 
         }
+        public async Task<RespuestaDTO> GrabarEvidenciaTI(RegistroElementosDTO evidenciaElementosTI)
+        {
+            int respuesta = 0;
+            using SqlConnection sql = new SqlConnection(_cadenaConexion);
+            using SqlCommand cmd = new SqlCommand("dbo.spGrabarRevisionElementosIT", sql);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            await sql.OpenAsync();
+            SqlTransaction sqlTransaccion = sql.BeginTransaction();
+            cmd.Transaction = sqlTransaccion;
+            try
+            {
+                cmd.Parameters.Add("@json", SqlDbType.NVarChar, -1);
+                cmd.Parameters["@json"].Value = JsonConvert.SerializeObject(evidenciaElementosTI);
+                cmd.Parameters.Add("@co_msg", SqlDbType.Int).Direction = ParameterDirection.Output;
+                cmd.Parameters.Add("@ds_msg", SqlDbType.VarChar, 250).Direction = ParameterDirection.Output;
+                respuesta = await cmd.ExecuteNonQueryAsync();
+                sqlTransaccion.Commit();
+
+                return new RespuestaDTO(
+                    Convert.ToInt32(cmd.Parameters["@co_msg"].Value),
+                    Convert.ToString(cmd.Parameters["@ds_msg"].Value),
+                    ""
+                    );
+
+            }
+            catch (SqlException ex)
+            {
+                try
+                {
+                    sqlTransaccion.Rollback();
+                    return new RespuestaDTO(ex.ErrorCode, ex.Message, "");
+                }
+                catch (Exception ex2)
+                {
+                    return new RespuestaDTO(ex.ErrorCode, ex2.Message, "");
+                }
+            }
+            catch (Exception e)
+            {
+                return new RespuestaDTO(-1, e.Message, "");
+            }
+            finally
+            {
+                sql.Close();
+            }
+
+
+        }
+
 
         #endregion
 
@@ -1165,8 +1220,194 @@ namespace ApiLoteriaNacional.Data
 
 
         }
+        public async Task<RespuestaDTO> ObtienePendientesSupervisorPorZona()
+        {
+            int respuesta = 0;
+            using SqlConnection sql = new SqlConnection(_cadenaConexion);
+            using SqlCommand cmd = new SqlCommand("dbo.spObtienePendientesSupervisorPorZona", sql);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            await sql.OpenAsync();
+            try
+            {
+                cmd.Parameters.Add("@co_msg", SqlDbType.Int).Direction = ParameterDirection.Output;
+                cmd.Parameters.Add("@ds_msg", SqlDbType.VarChar, 250).Direction = ParameterDirection.Output;
+                var reader = await cmd.ExecuteReaderAsync();
+
+                DataTable dtDatos = new DataTable();
+                dtDatos.Load(reader);
+                reader.Close();
+
+                return new RespuestaDTO(
+                    Convert.ToInt32(cmd.Parameters["@co_msg"].Value),
+                    Convert.ToString(cmd.Parameters["@ds_msg"].Value),
+                    JsonConvert.SerializeObject(dtDatos)
+                    );
+
+            }
+            catch (SqlException ex)
+            {
+                try
+                {
+                    return new RespuestaDTO(ex.ErrorCode, ex.Message, "");
+                }
+                catch (Exception ex2)
+                {
+                    return new RespuestaDTO(ex.ErrorCode, ex2.Message, "");
+                }
+            }
+            catch (Exception e)
+            {
+                return new RespuestaDTO(-1, e.Message, "");
+            }
+            finally
+            {
+                sql.Close();
+            }
 
 
+        }
+        public async Task<RespuestaDTO> ObtienePendientesSupervisorPorPDSZona(ZonasPorSupervisorDTO dato)
+        {
+            int respuesta = 0;
+            using SqlConnection sql = new SqlConnection(_cadenaConexion);
+            using SqlCommand cmd = new SqlCommand("dbo.spObtienePendientesSupervisorPorPDSZona", sql);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            await sql.OpenAsync();
+            try
+            {
+                cmd.Parameters.Add("@codigoZona", SqlDbType.Int);
+                cmd.Parameters["@codigoZona"].Value = dato.codigoZona;
+                cmd.Parameters.Add("@co_msg", SqlDbType.Int).Direction = ParameterDirection.Output;
+                cmd.Parameters.Add("@ds_msg", SqlDbType.VarChar, 250).Direction = ParameterDirection.Output;
+                var reader = await cmd.ExecuteReaderAsync();
+
+                DataTable dtDatos = new DataTable();
+                dtDatos.Load(reader);
+                reader.Close();
+
+                return new RespuestaDTO(
+                    Convert.ToInt32(cmd.Parameters["@co_msg"].Value),
+                    Convert.ToString(cmd.Parameters["@ds_msg"].Value),
+                    JsonConvert.SerializeObject(dtDatos)
+                    );
+
+            }
+            catch (SqlException ex)
+            {
+                try
+                {
+                    return new RespuestaDTO(ex.ErrorCode, ex.Message, "");
+                }
+                catch (Exception ex2)
+                {
+                    return new RespuestaDTO(ex.ErrorCode, ex2.Message, "");
+                }
+            }
+            catch (Exception e)
+            {
+                return new RespuestaDTO(-1, e.Message, "");
+            }
+            finally
+            {
+                sql.Close();
+            }
+
+
+        }
+        public async Task<RespuestaDTO> ObtienePendientesJefeComercialPorZona()
+        {
+            int respuesta = 0;
+            using SqlConnection sql = new SqlConnection(_cadenaConexion);
+            using SqlCommand cmd = new SqlCommand("dbo.spObtienePendientesJefePorZona", sql);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            await sql.OpenAsync();
+            try
+            {
+                cmd.Parameters.Add("@co_msg", SqlDbType.Int).Direction = ParameterDirection.Output;
+                cmd.Parameters.Add("@ds_msg", SqlDbType.VarChar, 250).Direction = ParameterDirection.Output;
+                var reader = await cmd.ExecuteReaderAsync();
+
+                DataTable dtDatos = new DataTable();
+                dtDatos.Load(reader);
+                reader.Close();
+
+                return new RespuestaDTO(
+                    Convert.ToInt32(cmd.Parameters["@co_msg"].Value),
+                    Convert.ToString(cmd.Parameters["@ds_msg"].Value),
+                    JsonConvert.SerializeObject(dtDatos)
+                    );
+
+            }
+            catch (SqlException ex)
+            {
+                try
+                {
+                    return new RespuestaDTO(ex.ErrorCode, ex.Message, "");
+                }
+                catch (Exception ex2)
+                {
+                    return new RespuestaDTO(ex.ErrorCode, ex2.Message, "");
+                }
+            }
+            catch (Exception e)
+            {
+                return new RespuestaDTO(-1, e.Message, "");
+            }
+            finally
+            {
+                sql.Close();
+            }
+
+
+        }
+        public async Task<RespuestaDTO> ObtienePendientesJefeComercialPorPDSZona(ZonasPorSupervisorDTO dato)
+        {
+            int respuesta = 0;
+            using SqlConnection sql = new SqlConnection(_cadenaConexion);
+            using SqlCommand cmd = new SqlCommand("dbo.spObtienePendientesJefeComercialPorPDSZona", sql);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            await sql.OpenAsync();
+            try
+            {
+                cmd.Parameters.Add("@codigoZona", SqlDbType.Int);
+                cmd.Parameters["@codigoZona"].Value = dato.codigoZona;
+                cmd.Parameters.Add("@co_msg", SqlDbType.Int).Direction = ParameterDirection.Output;
+                cmd.Parameters.Add("@ds_msg", SqlDbType.VarChar, 250).Direction = ParameterDirection.Output;
+                var reader = await cmd.ExecuteReaderAsync();
+
+                DataTable dtDatos = new DataTable();
+                dtDatos.Load(reader);
+                reader.Close();
+
+                return new RespuestaDTO(
+                    Convert.ToInt32(cmd.Parameters["@co_msg"].Value),
+                    Convert.ToString(cmd.Parameters["@ds_msg"].Value),
+                    JsonConvert.SerializeObject(dtDatos)
+                    );
+
+            }
+            catch (SqlException ex)
+            {
+                try
+                {
+                    return new RespuestaDTO(ex.ErrorCode, ex.Message, "");
+                }
+                catch (Exception ex2)
+                {
+                    return new RespuestaDTO(ex.ErrorCode, ex2.Message, "");
+                }
+            }
+            catch (Exception e)
+            {
+                return new RespuestaDTO(-1, e.Message, "");
+            }
+            finally
+            {
+                sql.Close();
+            }
+
+
+        }
         #endregion
 
         #region Informes
@@ -1368,29 +1609,84 @@ namespace ApiLoteriaNacional.Data
             cmd.Transaction = sqlTransaccion;
             try
             {
-                string opcion = string.Empty;
-
-                if (dato.secuencial == 0)
-                    opcion = "IN";
-                else
-                    opcion = "AC";
-                
                 cmd.Parameters.Add("@secuencial", SqlDbType.BigInt);
                 cmd.Parameters["@secuencial"].Value = dato.secuencial;
-                cmd.Parameters.Add("@codigoPDS", SqlDbType.SmallInt);
+                cmd.Parameters.Add("@codigoPDS", SqlDbType.Int);
                 cmd.Parameters["@codigoPDS"].Value = dato.codigoPDS;
-                cmd.Parameters.Add("@latitudPDS", SqlDbType.VarChar,100);
+                cmd.Parameters.Add("@latitudPDS", SqlDbType.VarChar, 100);
                 cmd.Parameters["@latitudPDS"].Value = dato.latitudPDS;
                 cmd.Parameters.Add("@longitudPDS", SqlDbType.VarChar, 100);
                 cmd.Parameters["@longitudPDS"].Value = dato.longitudPDS;
                 cmd.Parameters.Add("@direccionPDS", SqlDbType.VarChar, int.MaxValue);
                 cmd.Parameters["@direccionPDS"].Value = dato.direccionPDS;
-                cmd.Parameters.Add("@usuarioTransaccion", SqlDbType.VarChar, 20);
+                cmd.Parameters.Add("@usuarioTransaccion", SqlDbType.VarChar, 15);
                 cmd.Parameters["@usuarioTransaccion"].Value = dato.usuarioTransaccion;
-                cmd.Parameters.Add("@equipoTransaccion", SqlDbType.VarChar, 250);
+                cmd.Parameters.Add("@equipoTransaccion", SqlDbType.VarChar, 100);
                 cmd.Parameters["@equipoTransaccion"].Value = dato.equipoTransaccion;
                 cmd.Parameters.Add("@opcion", SqlDbType.Char, 2);
-                cmd.Parameters["@opcion"].Value = opcion;
+                cmd.Parameters["@opcion"].Value = "IN";
+                cmd.Parameters.Add("@co_msg", SqlDbType.Int).Direction = ParameterDirection.Output;
+                cmd.Parameters.Add("@ds_msg", SqlDbType.VarChar, 250).Direction = ParameterDirection.Output;
+                respuesta = await cmd.ExecuteNonQueryAsync();
+                sqlTransaccion.Commit();
+
+                return new RespuestaDTO(
+                    Convert.ToInt32(cmd.Parameters["@co_msg"].Value),
+                    Convert.ToString(cmd.Parameters["@ds_msg"].Value),
+                    ""
+                    );
+
+            }
+            catch (SqlException ex)
+            {
+                try
+                {
+                    sqlTransaccion.Rollback();
+                    return new RespuestaDTO(ex.ErrorCode, ex.Message, "");
+                }
+                catch (Exception ex2)
+                {
+                    return new RespuestaDTO(ex.ErrorCode, ex2.Message, "");
+                }
+            }
+            catch (Exception e)
+            {
+                return new RespuestaDTO(-1, e.Message, "");
+            }
+            finally
+            {
+                sql.Close();
+            }
+
+
+        }
+        public async Task<RespuestaDTO> mantenimientoActualizarUbicacionPDS(GeolocalizacionDTO dato)
+        {
+            int respuesta = 0;
+            using SqlConnection sql = new SqlConnection(_cadenaConexion);
+            using SqlCommand cmd = new SqlCommand("dbo.spMantenimientoUbicacionPDS", sql);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            await sql.OpenAsync();
+            SqlTransaction sqlTransaccion = sql.BeginTransaction();
+            cmd.Transaction = sqlTransaccion;
+            try
+            {
+                cmd.Parameters.Add("@secuencial", SqlDbType.BigInt);
+                cmd.Parameters["@secuencial"].Value = dato.secuencial;
+                cmd.Parameters.Add("@codigoPDS", SqlDbType.Int);
+                cmd.Parameters["@codigoPDS"].Value = dato.codigoPDS;
+                //cmd.Parameters.Add("@latitudPDS", SqlDbType.VarChar, 100);
+                //cmd.Parameters["@latitudPDS"].Value = dato.latitudPDS;
+                //cmd.Parameters.Add("@longitudPDS", SqlDbType.VarChar, 100);
+                //cmd.Parameters["@longitudPDS"].Value = dato.longitudPDS;
+                cmd.Parameters.Add("@direccionPDS", SqlDbType.VarChar, int.MaxValue);
+                cmd.Parameters["@direccionPDS"].Value = dato.direccionPDS;
+                cmd.Parameters.Add("@usuarioTransaccion", SqlDbType.VarChar, 15);
+                cmd.Parameters["@usuarioTransaccion"].Value = dato.usuarioTransaccion;
+                cmd.Parameters.Add("@equipoTransaccion", SqlDbType.VarChar, 100);
+                cmd.Parameters["@equipoTransaccion"].Value = dato.equipoTransaccion;
+                cmd.Parameters.Add("@opcion", SqlDbType.Char, 2);
+                cmd.Parameters["@opcion"].Value = "AC";
                 cmd.Parameters.Add("@co_msg", SqlDbType.Int).Direction = ParameterDirection.Output;
                 cmd.Parameters.Add("@ds_msg", SqlDbType.VarChar, 250).Direction = ParameterDirection.Output;
                 respuesta = await cmd.ExecuteNonQueryAsync();
@@ -1427,8 +1723,48 @@ namespace ApiLoteriaNacional.Data
 
         }
 
+        #endregion
+
+        #region Evidencia IT
+        public async Task<RespuestaDTO> obtenerEvidenciaTIxRangoFechas(EvidenciaTIDTO dato)
+        {
+            try
+            {
+                using SqlConnection sql = new SqlConnection(_cadenaConexion);
+                using SqlCommand cmd = new SqlCommand("dbo.spObtieneElementosTIxRangoFechas", sql);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+
+                cmd.Parameters.Add("@fechaDesde", SqlDbType.VarChar, 10);
+                cmd.Parameters["@fechaDesde"].Value = dato.fechaDesde;
+                cmd.Parameters.Add("@fechaHasta", SqlDbType.VarChar, 10);
+                cmd.Parameters["@fechaHasta"].Value = dato.fechaHasta;
+                cmd.Parameters.Add("@co_msg", SqlDbType.Int).Direction = ParameterDirection.Output;
+                cmd.Parameters.Add("@ds_msg", SqlDbType.VarChar, 250).Direction = ParameterDirection.Output;
+
+                await sql.OpenAsync();
+                var reader = await cmd.ExecuteReaderAsync();
+
+                DataTable dtDatos = new DataTable();
+                dtDatos.Load(reader);
+                reader.Close();
+
+                return new RespuestaDTO(
+                    Convert.ToInt32(cmd.Parameters["@co_msg"].Value),
+                    cmd.Parameters["@ds_msg"].Value.ToString(),
+                    JsonConvert.SerializeObject(dtDatos)
+                    )
+                    ;
+
+            }
+            catch (Exception e)
+            {
+                return new RespuestaDTO(-1, e.Message, "");
+            }
+        }
 
         #endregion
+
+
     }
 
 }

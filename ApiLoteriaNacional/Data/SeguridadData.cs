@@ -7,6 +7,7 @@ using NuGet.Protocol.Plugins;
 using Newtonsoft.Json;
 using LoteriaNacionalDominio;
 using static LoteriaNacionalDominio.SeguridadDTO;
+using Microsoft.IdentityModel.Protocols.WsTrust;
 
 
 namespace ApiLoteriaNacional.Data
@@ -184,8 +185,10 @@ namespace ApiLoteriaNacional.Data
                 string dominioCentral = "CENTRAL";
                 dominioUsuario = dominioCentral + @"\" + usuario.UserName;
                 DirectoryEntry deCentral = new DirectoryEntry("LDAP://central.jbgye.org.ec", dominioUsuario, usuario.Password);
+
                 DirectorySearcher dsearcherCentral = new DirectorySearcher(deCentral);
                 dsearcherCentral.Filter = string.Format("(|(&(objectCategory=user)(sAMAccountName={0})))", usuario.UserName);
+                
                 sresult = dsearcherCentral.FindOne();
                 if (sresult != null)
                     nombreCompleto = sresult.GetDirectoryEntry().Properties["displayName"][0].ToString();

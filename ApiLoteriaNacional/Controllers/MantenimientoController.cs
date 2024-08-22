@@ -120,5 +120,51 @@ namespace ApiLoteriaNacional.Controllers
         #region Procesos por Aplicacion
 
         #endregion
+
+        #region Jefes Zonales
+
+        [HttpPost("MantenimientoObtenerJefesZonales")]
+        public async Task<IActionResult> MantenimientoObtenerJefesZonales([FromBody] JefeZonalDTO dato)
+        {
+            return Ok(await _mantenimiento.mantenimientoJefesZonales(dato));
+
+        }
+
+        [HttpPost("MantenimientoGrabarJefesZonales")]
+        public async Task<IActionResult> MantenimientoGrabarJefesZonales(JefeZonalDTO dato)
+        {
+            return Ok(await _mantenimiento.mantenimientoGrabarJefesZonales(dato));
+
+        }
+
+        [HttpPost("ObtenerJefesZonales")]
+        public async Task<IActionResult> ObtenerJefesZonales()
+        {
+            return Ok(await _mantenimiento.obtenerJefesZonales());
+        }
+
+        #endregion
+
+        #region Elementos de TI
+        [HttpPost("MantenimientoObtenerElementosTI")]
+        public async Task<IActionResult> MantenimientoObtenerElementosTI([FromBody] ElementosTIDTO dato)
+        {
+            return Ok(await _mantenimiento.mantenimientoElementosTI(dato));
+
+        }
+
+        [HttpPost("MantenimientoGrabarElementosTI")]
+        public async Task<IActionResult> MantenimientoGrabarElementosTI(ElementosTIDTO dato)
+        {
+            return Ok(await _mantenimiento.mantenimientoGrabarElementosTI(dato));
+
+        }
+
+        [HttpPost("ObtenerElementosTI")]
+        public async Task<IActionResult> ObtenerElementosTI()
+        {
+            return Ok(await _mantenimiento.obtenerElementosTI());
+        }
+        #endregion
     }
 }
